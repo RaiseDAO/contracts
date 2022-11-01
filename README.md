@@ -7,7 +7,7 @@
 - Staking address: `0x984A8746Bacb613F74FDB9934eba00aD911f3Ed3`
 - Verification link: https://goerli-rollup-explorer.arbitrum.io/address/0x984A8746Bacb613F74FDB9934eba00aD911f3Ed3#code
 
-- Token address: `0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83` UPD
+- Token address: `0x00eA238b9Afbc808F03a4884CBc88f407489338D`
 
 - USDC address: `0x9b6D5D0fd667E685D73E18E1b8dB8f6245df0f19`
 - USDT address: `0x7412fc4d2a3c1c24739845b1079B5bb0097AbBE5`
@@ -15,16 +15,16 @@
 
 #### zkSync goerli
 
-- Staking address: `0xFE0882475E19C6Cf6daC77dB3c592a123b61f461`
-- Zkscan link: https://explorer.zksync.io/address/0xFE0882475E19C6Cf6daC77dB3c592a123b61f461
+- Staking address: `0xD9a724b34DAa4EC1bC1e5585D608064C5Ad628c9`
+- Zkscan link: https://explorer.zksync.io/address/0xD9a724b34DAa4EC1bC1e5585D608064C5Ad628c9
 
-- Token address: `0x17fD6bb20E2178d08Df93211362D1d06dBD1f82D`
+- Token address: `0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83`
 
-- USDC address: `0xCcd65496Dfa98E292482b2C017D1b19D391673b5`
-- USDT address: `0x556b26Afad1926856ff436d3E95B5D210FCbFFE1`
-- DAI address: `0x06006E8AfFF3a2ecf43F849B9 eD18f6Fa5511cde`
+- USDC address: `0x9f4fA1E9C27EfB6FE11DADfC4aa5E50d9ad2D426`
+- USDT address: `0x5077B50F1Ed22c7E24eD8F8E10A3898C38cBb3DB`
+- DAI address: `0xCECF7296e03F7753ADc58F39c647C90c5458259A`
 
-- Multicall address: `0x842c1fD75CAd8EdD845361E12aB5A94E9A39d26d`
+- Multicall address: `0xc3012E740fff4A3034cBDA8e2bCC7B5b5d6D93CE`
 
 This contract contains sushi-like staking implementation architecture described bellow in the architecture section. User can stake RAISE tokens or other and get a staking reward. A tier is acqired to user based on staked raise tokens.
 
@@ -228,15 +228,11 @@ We need to store users of a specific tier to return them for lottery distributio
 
 - Factory address: `0xaE8e3813849be020dBE84dC447BC3A818D0e3430`
 - Verification link: https://testnet.arbiscan.io/address/0xaE8e3813849be020dBE84dC447BC3A818D0e3430#code
-- Project token: `0x0A1F75C64179a7Ffd41650b8B8567BC4846DB3E6`
-- Pay token: `0x14609E0f716B091b82625A2be6420bb47680C04a`
 
 #### zkSync goerli
 
 - Factory address: `0x61e14227eF05dA292536BA907d2fefbC878F2985`
 - Zkscan link: https://zksync2-testnet.zkscan.io/address/0x61e14227eF05dA292536BA907d2fefbC878F2985#code
-- Project token: `0x17CC238aff7E7a1b4E6Ac431861c5CAC35F0b227`
-- Pay token: `0xBF3d47F19A98D3A1b7c6aa75f88F22C3FE873d41`
 
 Contains ERC1967Proxy - based factory pattern implementation. Use it to create new sales.
 Can be used to create ERC20 and ERC1155 sales
@@ -563,8 +559,8 @@ So we can calculate the percent withdrawn. We also know what percent to give to 
 
 #### zkSync goerli
 
-- Actual address: `0x842c1fD75CAd8EdD845361E12aB5A94E9A39d26d`
-- Zkscan link: https://zksync2-testnet.zkscan.io/address/0x842c1fD75CAd8EdD845361E12aB5A94E9A39d26d#code
+- Actual address: `0xc3012E740fff4A3034cBDA8e2bCC7B5b5d6D93CE`
+- Zkscan link: https://zksync2-testnet.zkscan.io/address/0xc3012E740fff4A3034cBDA8e2bCC7B5b5d6D93CE#code
 
 ### Useful commands:
 
