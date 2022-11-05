@@ -43,7 +43,7 @@ describe("Sale factory", function () {
   });
 
   it("Test erc20 sale creation", async () => {
-    const createdSaleTx = await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, projectTokenDecimals, minimumAmountToFund, false, SERVICE_FEE);
+    const createdSaleTx = await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, minimumAmountToFund, false, SERVICE_FEE);
     
     const createdSaleRc = await createdSaleTx.wait();
     const [newSaleAddr, newSaleType] = createdSaleRc.events?.find(x => x.event == "SaleCreated")?.args!;
@@ -55,14 +55,14 @@ describe("Sale factory", function () {
 
   it("Check that it's impossible to create a valid sale with invalid implementation", async () => {
     await saleFactory.updateSaleContract(SaleType.ERC20, NULL_ADDRESS);
-    await expect(saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, projectTokenDecimals, minimumAmountToFund, false, SERVICE_FEE)).to.be.revertedWith("");
+    await expect(saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, minimumAmountToFund, false, SERVICE_FEE)).to.be.revertedWith("");
   });
 
   it("Test sale amount correctness", async () => {
     const testAmount = 10;
 
     for(let i = 0; i < testAmount; i++) {
-        const createdSaleTx = await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, projectTokenDecimals, minimumAmountToFund, false, SERVICE_FEE);
+        const createdSaleTx = await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, minimumAmountToFund, false, SERVICE_FEE);
         const createdSaleRc = await createdSaleTx.wait();
         const [newSaleAddr, newSaleType] = createdSaleRc.events?.find(x => x.event == "SaleCreated")?.args!;
         
@@ -83,7 +83,7 @@ describe("Sale factory", function () {
     const testAmount = 10;
 
     for(let i = 0; i < testAmount; i++) {
-        await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, projectTokenDecimals, minimumAmountToFund, false, SERVICE_FEE);
+        await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, minimumAmountToFund, false, SERVICE_FEE);
     }
 
     const sales = await saleFactory.getSales(SaleType.ERC20, 1, 1000);
@@ -109,7 +109,7 @@ describe("Sale factory", function () {
   });
 
   it("Check is created by factory correctness", async () => {
-    const createdSaleTx = await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, projectTokenDecimals, minimumAmountToFund, false, SERVICE_FEE);
+    const createdSaleTx = await saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, minimumAmountToFund, false, SERVICE_FEE);
     const createdSaleRc = await createdSaleTx.wait();
     const [newSaleAddr, newSaleType] = createdSaleRc.events?.find(x => x.event == "SaleCreated")?.args!;
 
@@ -118,7 +118,7 @@ describe("Sale factory", function () {
   });
 
   it("Test that only owner can create sale", async () => {
-    await expect(saleFactory.connect(user1).createSale(user1.address, SaleType.ERC20, fakeToken1.address, raiseAdmin.address, 18, 0, false, 10)).to.be.revertedWith("Ownable: caller is not the owner");
+    await expect(saleFactory.connect(user1).createSale(user1.address, SaleType.ERC20, fakeToken1.address, raiseAdmin.address, 0, false, 10)).to.be.revertedWith("Ownable: caller is not the owner");
   });
 
   it("Test that only owner can update sale contract", async () => {

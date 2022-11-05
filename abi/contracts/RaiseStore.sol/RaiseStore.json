@@ -159,13 +159,18 @@
       {
         "components": [
           {
+            "internalType": "uint128",
+            "name": "shopUUID",
+            "type": "uint128"
+          },
+          {
             "internalType": "address",
             "name": "sellerAddr",
             "type": "address"
           },
           {
             "internalType": "uint256",
-            "name": "userTgId",
+            "name": "userId",
             "type": "uint256"
           },
           {
@@ -271,13 +276,18 @@
       {
         "components": [
           {
+            "internalType": "uint128",
+            "name": "shopUUID",
+            "type": "uint128"
+          },
+          {
             "internalType": "address",
             "name": "sellerAddr",
             "type": "address"
           },
           {
             "internalType": "uint256",
-            "name": "userTgId",
+            "name": "userId",
             "type": "uint256"
           },
           {

@@ -6,13 +6,14 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 import "./Tier.sol";
 
 /// @title ERC20 token sale of the Raise Finance project. See https://raisefinance.io for more details
 /// @author asimaranov
 /// @notice Implements token sale with rounds and tier-based priority management
-contract SaleERC20 is Pausable, Initializable {
+contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     struct Round {
@@ -163,8 +164,8 @@ contract SaleERC20 is Pausable, Initializable {
 
     /// @notice Starts new sale round
     /// @param requiredTier Tier required to participate in the round
-    /// @param maxAllocation Maxmum amount of project tokens can be bought in the round
-    /// @param maxAllocationPerUser Maxmum amount of project tokens can be bought be one user in the round
+    /// @param maxAllocation Maximum amount of project tokens can be bought in the round
+    /// @param maxAllocationPerUser Maximum amount of project tokens can be bought be one user in the round
     /// @param periodSeconds Round duration in seconds
     /// @param tokenPrice_ Price of the project token
     /// @param isFinal Is sale ends after this round
@@ -180,6 +181,7 @@ contract SaleERC20 is Pausable, Initializable {
     )
         public onlyRaiseAdmin
     {
+        require(rounds.length == 0 || !rounds[rounds.length-1].isFinal, "Can't add round after final one");  // Either there're no rounds or last round is not final
         if (!isSaleStarted) {
             isSaleStarted = true;
             require(projectTokenBalance >= minimumAmountToFund, "Sale is not funded");
@@ -217,7 +219,7 @@ contract SaleERC20 is Pausable, Initializable {
     /// @param payTokenAmount Amount of pay token to pay
     /// @param allocationBonusPercent Whitelisted user allocation bonus percent
     /// @param proof Proof that user can participate and has the corresponding allocation bonus
-    function buy(uint256 payTokenAmount, uint8 allocationBonusPercent, bytes32[] memory proof) public whenNotPaused onlyHealthy {
+    function buy(uint256 payTokenAmount, uint8 allocationBonusPercent, bytes32[] memory proof) public whenNotPaused nonReentrant onlyHealthy {
         Round memory ongoingRound = getOngoingRound();
 
         uint256 projectTokenAmount = payTokenAmount * oneProjectToken / ongoingRound.tokenPrice;

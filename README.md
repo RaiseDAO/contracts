@@ -249,9 +249,9 @@ Can be used to create ERC20 and ERC1155 sales
 - Deploy pay token to zkSync:<br>`ZK=1 npx hardhat deployUSDC --network zkSyncTest`
 
 
-- Create ERC20 sale on zkSync:<br>`npx hardhat createSale --factory-addr 0x61e14227eF05dA292536BA907d2fefbC878F2985 --sale-owner 0x2836eC28C32E232280F984d3980BA4e05d6BF68f --sale-type 0 --pay-token-addr 0xBF3d47F19A98D3A1b7c6aa75f88F22C3FE873d41 --project-token-addr 0x17CC238aff7E7a1b4E6Ac431861c5CAC35F0b227 --project-token-decimals 18 --minimum-amount-to-fund 10000 --is-withdraw-vesting-enabled 0 --service-fee-percent 10 --network zkSyncTest`
+- Create ERC20 sale on zkSync:<br>`npx hardhat createSale --factory-addr 0x61e14227eF05dA292536BA907d2fefbC878F2985 --sale-owner 0x2836eC28C32E232280F984d3980BA4e05d6BF68f --sale-type 0 --pay-token-addr 0xBF3d47F19A98D3A1b7c6aa75f88F22C3FE873d41 --project-token-addr 0x17CC238aff7E7a1b4E6Ac431861c5CAC35F0b227  --minimum-amount-to-fund 10000 --is-withdraw-vesting-enabled 0 --service-fee-percent 10 --network zkSyncTest`
 
-- Create ERC20 sale on arbitrum:<br>`npx hardhat createSale --factory-addr 0xaE8e3813849be020dBE84dC447BC3A818D0e3430 --sale-owner 0x2836eC28C32E232280F984d3980BA4e05d6BF68f --sale-type 0 --pay-token-addr 0x14609E0f716B091b82625A2be6420bb47680C04a --project-token-addr 0x0A1F75C64179a7Ffd41650b8B8567BC4846DB3E6 --project-token-decimals 18 --minimum-amount-to-fund 10000 --is-withdraw-vesting-enabled 0 --service-fee-percent 10 --network arbitrumTestnet`
+- Create ERC20 sale on arbitrum:<br>`npx hardhat createSale --factory-addr 0xaE8e3813849be020dBE84dC447BC3A818D0e3430 --sale-owner 0x2836eC28C32E232280F984d3980BA4e05d6BF68f --sale-type 0 --pay-token-addr 0x14609E0f716B091b82625A2be6420bb47680C04a --project-token-addr 0x0A1F75C64179a7Ffd41650b8B8567BC4846DB3E6  --minimum-amount-to-fund 10000 --is-withdraw-vesting-enabled 0 --service-fee-percent 10 --network arbitrumTestnet`
 
 - Fund ERC20 sale on arbitrum:<br>`npx hardhat fundSale --sale-addr 0xAA4A16940D602B98244a0200567CF5658DCFeE42 --token-addr 0x0A1F75C64179a7Ffd41650b8B8567BC4846DB3E6 --token-amount 1000000 --network arbitrumTestnet`
 

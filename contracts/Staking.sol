@@ -79,6 +79,9 @@ contract Staking is Ownable, Pausable {
     event TierObtained(address indexed user, Tier tier);
     event Funded(address indexed user, uint256 amount);
     event Withdrawed(address indexed user, uint256 amount);
+    event AllocationPointsSet(uint256 poolId, uint256 allocPoints);
+    event PenaltyPercentSet(uint8 penaltyPercent_);
+    event RaisePerBlockSet(uint256 newRaisePerBlock);
 
     constructor(address raiseTokenAddr, uint256 raisePerBlock_) {
         raiseToken = IERC20(raiseTokenAddr);
@@ -332,18 +335,21 @@ contract Staking is Ownable, Pausable {
     /// @param allocPoints Allocation points to set
     function setAllocPoints(uint256 poolId, uint256 allocPoints) public onlyOwner {
         pools[poolId].allocPoints = allocPoints;
+        emit AllocationPointsSet(poolId, allocPoints);
     }
 
     /// @notice Sets penalty for early unstake fee percent
     /// @param penaltyPercent_ The new penalty percent
     function setPenaltyPercent(uint8 penaltyPercent_) public onlyOwner {
         penaltyPercent = penaltyPercent_;
+        emit PenaltyPercentSet(penaltyPercent_);
     }
 
     /// @notice Sets amount of raise token staking collects after one block passed 
     /// @param newRaisePerBlock New raise per block amount to set
     function setRaisePerBlock(uint256 newRaisePerBlock) public onlyOwner {
         raisePerBlock = newRaisePerBlock;
+        emit RaisePerBlockSet(newRaisePerBlock);
     }
 
     /// @notice Sets required stake to get a tier

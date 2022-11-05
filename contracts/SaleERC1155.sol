@@ -64,6 +64,7 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder {
     event RaisedFundsWithdrawnEmergency(uint256 amount);
     event Refunded(address indexed user, uint256 amount);
     event HealthStatusSet(bool isUnhealthy);
+    event ServiceFeeSet(uint8 newFeePercent);
 
     modifier onlyRaiseAdmin() {
         require(msg.sender == raiseAdmin, "Caller is not the raise admin");
@@ -356,17 +357,14 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder {
             saleOwnerWithdrawTimes[i] += secondsToShift;
     }
 
-    function setIsUnhealthy(bool isUnhealthy_) public onlyRaiseAdmin {
-        isUnhealthy = isUnhealthy_;
-
-        if (isUnhealthy)
-            sumToRefundIfUnhealthy = totalPayTokenCollected - totalPayTokenWithdrawn;
-
-        emit HealthStatusSet(isUnhealthy_);
+    function setIsUnhealthy() public onlyRaiseAdmin {
+        isUnhealthy = true;
+        emit HealthStatusSet(true);
     }
 
     function setServiceFee(uint8 newFeePercent) public onlyRaiseAdmin {
         serviceFeePercent = newFeePercent;
+        emit ServiceFeeSet(newFeePercent);
     }
 
     function pause() public onlyRaiseAdmin {

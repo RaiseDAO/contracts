@@ -51,7 +51,7 @@ const config: HardhatUserConfig = {
   },
   zksolc: {
     version: "1.2.0",
-    compilerSource: "docker",
+    compilerSource: "binary",
     settings: {
       optimizer: {
         enabled: true,

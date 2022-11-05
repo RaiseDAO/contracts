@@ -19,7 +19,6 @@ task("createSale", "Creates new round")
   )
   .addParam("payTokenAddr", "Address of the pay token")
   .addParam("projectTokenAddr", "Address of the project token")
-  .addParam("projectTokenDecimals", "Project token decimals")
   .addParam(
     "minimumAmountToFund",
     "Minium amount for sale owner to fund. In tokens to sell"
@@ -46,7 +45,6 @@ task("createSale", "Creates new round")
       args["saleType"],
       args["payTokenAddr"],
       args["projectTokenAddr"],
-      args["projectTokenDecimals"],
       parseEther(args["minimumAmountToFund"]),
       args["isWithdrawVestingEnabled"],
       args["serviceFeePercent"]
@@ -214,7 +212,7 @@ task("stopRound", "Stop ongoing round")
   });
 
 
-task("balanceOf", "Creates new round")
+task("balanceOf", "Balance of token")
   .addParam("tokenAddr", "")
   .addParam("userAddr", "")
   .setAction(async (args, hre) => {
@@ -224,3 +222,21 @@ task("balanceOf", "Creates new round")
     );
     console.log(await token.balanceOf(args["userAddr"]));
   });
+
+  task("changeSaleFactoryOwnerAddr", "Changes sale factory owner address")
+    .addParam("factoryAddr", "Address of the deployed staking contract")
+    .addParam("newOwnerAddr", "Address of user to grand permissions")
+    .setAction(async (args, hre) => {
+        const saleFactory = await hre.ethers.getContractAt("SaleFactory", args['factoryAddr']);
+        const tx = await saleFactory.transferOwnership(args['newOwnerAddr']);
+
+        console.log(tx);
+        console.log(await tx.wait());
+    });
+
+    task("getFactoryOwner", "Changes staking owner address")
+    .addParam("factoryAddr", "Address of the deployed staking contract")
+    .setAction(async (args, hre) => {
+        const saleFactory = await hre.ethers.getContractAt("SaleFactory", args['factoryAddr']);
+        console.log(await saleFactory.owner());
+    });

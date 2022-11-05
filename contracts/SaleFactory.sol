@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 /// @title Sale Factory of the Raise Finance project. See https://raisefinance.io for more details
 /// @author asimaranov
@@ -29,21 +30,19 @@ contract SaleFactory is Ownable {
     /// @param saleType Sale type. ERC20 / ERC1155
     /// @param payTokenAddr Address of pay token
     /// @param projectTokenAddr Address of project token
-    /// @param projectTokenDecimals Decimals of project token
     /// @param minimumAmountToFund Minimum amount of tokens sale owner should deposit
     function createSale(
         address saleOwner, 
         SaleType saleType, 
         address payTokenAddr, 
         address projectTokenAddr, 
-        uint256 projectTokenDecimals, 
         uint256 minimumAmountToFund,
         bool isWithdrawVestingEnabled, 
         uint8 serviceFeePercent
     ) 
         public onlyOwner 
     {
-        
+        uint256 projectTokenDecimals = IERC20Metadata(projectTokenAddr).decimals();
         address newSale = address(new ERC1967Proxy(saleContractAddresses[saleType], 
         abi.encodeWithSignature(
             "initialize(address,address,address,address,uint256,uint256,bool,uint8)", 
@@ -57,7 +56,7 @@ contract SaleFactory is Ownable {
         emit SaleCreated(newSale, saleType);
     }
 
-    /// @notice Updates sale contract implemetation
+    /// @notice Updates sale contract implementation
     function updateSaleContract(SaleType saleType, address newSaleContractAddr) public onlyOwner {
         saleContractAddresses[saleType] = newSaleContractAddr;
     }

@@ -127,7 +127,6 @@ describe("Sale ERC20", function () {
         SaleType.ERC20,
         fakeToken1.address,
         raiseToken.address,
-        projectTokenDecimals,
         minimumAmountToFund,
         false,
         serviceFee
@@ -146,7 +145,6 @@ describe("Sale ERC20", function () {
         SaleType.ERC20,
         fakeToken1.address,
         raiseToken.address,
-        projectTokenDecimals,
         minimumAmountToFund,
         true,
         serviceFee
@@ -169,7 +167,6 @@ describe("Sale ERC20", function () {
         SaleType.ERC20,
         USDC.address,
         raiseToken.address,
-        projectTokenDecimals,
         minimumAmountToFund,
         true,
         serviceFee
@@ -346,6 +343,53 @@ describe("Sale ERC20", function () {
     ).to.be.true;
   });
 
+  it("Test that impossible to create a round after final one", async () => {
+    await raiseToken.approve(saleERC20.address, testAmountToStake);
+    await saleERC20.fund(testAmountToStake);
+
+    await saleERC20
+      .connect(raiseAdmin)
+      .createRound(
+        testTier,
+        testMaxAllocation,
+        testMaxAllocationPerUser,
+        testPeriodSeconds,
+        testTokenPrice,
+        false,
+        EMPTY_PROOF
+      );
+
+    await ethers.provider.send("evm_increaseTime", [testPeriodSeconds + 1]);
+    await ethers.provider.send("evm_mine", []);
+
+    await saleERC20
+      .connect(raiseAdmin)
+      .createRound(
+        testTier,
+        testMaxAllocation,
+        testMaxAllocationPerUser,
+        testPeriodSeconds,
+        testTokenPrice,
+        true,
+        EMPTY_PROOF
+      );
+
+      await ethers.provider.send("evm_increaseTime", [testPeriodSeconds + 1]);
+      await ethers.provider.send("evm_mine", []);
+  
+      await expect(saleERC20
+        .connect(raiseAdmin)
+        .createRound(
+          testTier,
+          testMaxAllocation,
+          testMaxAllocationPerUser,
+          testPeriodSeconds,
+          testTokenPrice,
+          true,
+          EMPTY_PROOF
+        )).to.be.revertedWith("Can't add round after final one");
+  });
+
   it("Test that user can't create round if service is not funded", async () => {
     const createdSaleAddr = await saleFactory
       .connect(raiseAdmin)
@@ -354,7 +398,6 @@ describe("Sale ERC20", function () {
         SaleType.ERC20,
         fakeToken1.address,
         raiseToken.address,
-        await raiseToken.decimals(),
         minimumAmountToFund,
         false,
         serviceFee
@@ -1023,7 +1066,7 @@ describe("Sale ERC20", function () {
     const thirtyPercentTimeOffset2 = 60 * 60 * 15;
     const thirtyPercentTimeOffset3 = 60 * 60 * 25;
 
-    const now = Math.round(Date.now() / 1000);
+    const now = (await ethers.provider.getBlock("latest")).timestamp;
 
     const testClaimTimes = [
       now + fortyPercentTimeOffset1,
