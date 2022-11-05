@@ -491,7 +491,7 @@ Then owner can create round by calling
         public initializer
   ```
 
-````
+
 > Please do not initialize sale contract directly. Use contract factory
 
 
@@ -568,90 +568,119 @@ So we can calculate the percent withdrawn. We also know what percent to give to 
 
 ### Tests
 
+- Lottery tests
+- ✔ If there is only one user, lottery will choose him (224ms)
+- ✔ If we want to choose ten users out of ten, all the users will be choosen (591ms)
+- ✔ If we want to choose 5 users out of 15, only 5 will be choosen for fan, merchant and dealer tiers with no duplicates (450ms)
+- ✔ If we want to choose 5 users out of 15, statistical distribution will be correct (156ms)
+
 - Sale ERC20
-- ✔ Test funding and withdrawing (71ms)
-- ✔ Test that user can't withdraw more money than service has (45ms)
+- ✔ Check only sale owner can withdraw (52ms)
+- ✔ Test that sale owner can't withdraw until end round ended
+- ✔ Test funding and withdrawing (146ms)
+- ✔ Test that impossible to create a round after final one (67ms)
+- ✔ Test that user can't create round if service is not funded (71ms)
 - ✔ Test round creation
-- ✔ Check that admin can't create round if there an active one (38ms)
-- ✔ Check that admin create a new round if stopped current one (52ms)
-- ✔ Check that regular user can't create round
-- ✔ Test that not whitelisted users can't participate event (67ms)
-- ✔ Test that whitelist addresses and allocation bonuses must have the same time
-- ✔ Test that user can't buy more than user allocation (49ms)
-- ✔ Test buying (153ms)
-- ✔ Test profit withdrawing (80ms)
-- ✔ Test that it's impossible to withdraw twice (98ms)
-- ✔ Test withdrawing from multiple rounds (155ms)
-- ✔ Test user can't withdraw more than round allocation (101ms)
-- ✔ Test user can buy tokens regarding his allocation bonus (72ms)
-- ✔ Test user can't buy more tokens then he can regarding the allocation bonus (52ms)
-- ✔ Test ownership transferring (73ms)
-- ✔ Test user can't claim if service has zero balance (93ms)
-- ✔ Test claiming in case round time is default (83ms)
-- ✔ Test that double claim is impossible (77ms)
-- ✔ Test claiming with custom veting schedule (451ms)
-- ✔ Test claiming with custom veting schedule shifting (305ms)
+- ✔ Check that admin can't create round if there an active one
+- ✔ Check that admin create a new round if stopped current one (41ms)
+- ✔ Check that regular user or sale owner can't create round
+- ✔ Test that not whitelisted users can't participate event (56ms)
+- ✔ Test that user can't buy more than user allocation (64ms)
+- ✔ Test buying (84ms)
+- ✔ Test project token withdrawing (72ms)
+- ✔ Test raised withdrawing (78ms)
+- ✔ Test that it's impossible to withdraw twice (83ms)
+- ✔ Test withdrawing from multiple rounds (114ms)
+- ✔ Test user can't withdraw more than round allocation (66ms)
+- ✔ Test user can buy tokens regarding his allocation bonus (51ms)
+- ✔ Test user can't buy more tokens then he can regarding the allocation bonus (48ms)
+- ✔ Test ownership transferring
+- ✔ Test claiming in case round time is default (70ms)
+- ✔ Test that double claim is impossible (70ms)
+- ✔ Test claiming with custom vesting schedule (250ms)
+- ✔ Test claiming with custom vesting schedule shifting (210ms)
 - ✔ Test incorrect vesting params
-- ✔ Check ongoing round (112ms)
-- ✔ Test pausing (46ms)
-- ✔ Test allocation bonus and whitelisting correctness (230ms)
-- ✔ Check that allocation bonus percent can't be greater 127
+- ✔ Check ongoing round (74ms)
+- ✔ Test pausing (47ms)
+- ✔ Test allocation bonus and whitelisting correctness (91ms)
 - ✔ Check raise admin can't withdraw if project is healthy
 - ✔ Check raise admin transferring
 - ✔ Check user can't buy and owner can't withdraw profit if project is unhealthy
 - ✔ Check admin can't set or shit withdraw vesting if it's not enabled
-- ✔ Test withdrawing with withdraw schedule (200ms)
-- ✔ Test withdrawing with shifted withdraw schedule (218ms)
-- ✔ Test emergency profit withdrawing by admin (187ms)
-- ✔ Test incorrect withdraw vesting params
-- ✔ Test refunding (124ms)
-- ✔ Test refunding case if first user donated 2/3, second 1/3. Owner withdrawed 1/2 (211ms)
+- ✔ Test withdrawing with withdraw schedule (188ms)
+- ✔ Test withdrawing with shifted withdraw schedule (176ms)
+- ✔ Test emergency profit withdrawing by admin (158ms)
+- ✔ Test incorrect withdraw vesting params (40ms)
+- ✔ Test refunding (108ms)
+- ✔ Test refunding case if first user donated 2/3, second 1/3. Owner withdrawn 1/2 (187ms)
+- ✔ Test service fee changing
+- ✔ Check admin can withdraw tokens project tokens if project is unhealthy (42ms)
+- ✔ Test usdc sale with price 100 (89ms)
+- ✔ Test usdc sale with price 0.01 (92ms)
+- ✔ Test token price can't be zero
+- ✔ Test user can't buy if sum is too low (53ms)
+- ✔ Check sale is finished after if final round is stopped (71ms)
 
 - Sale factory
-- ✔ Test erc20 sale creation (88ms)
-- ✔ Check that it's impossible to create a valid sale with invalid implementation (115ms)
-- ✔ Test sale amount correctness (924ms)
-- ✔ Check is created by factory correctness (77ms)
+- ✔ Test erc20 sale creation (62ms)
+- ✔ Check that it's impossible to create a valid sale with invalid implementation
+- ✔ Test sale amount correctness (769ms)
+- ✔ Test sale pagination (558ms)
+- ✔ Check is created by factory correctness (59ms)
+- ✔ Test that only owner can create sale
+- ✔ Test that only owner can update sale contract
 
 - Staking
 - ✔ Test platform initialization
 - ✔ Test period calculation
-- ✔ Test tier by staking amount calculation (91ms)
-- ✔ Test tier by staking amount calculation if required stake changed (156ms)
+- ✔ Test tier by staking amount calculation (56ms)
+- ✔ Test tier by staking amount calculation if required stake changed (75ms)
 - ✔ Test allocation bonus calculation
-- ✔ Test staking (128ms)
+- ✔ Test staking (79ms)
+- ✔ Test consequential tier achieving (230ms)
 - ✔ Check that user can't stake zero tokens
-- ✔ Test unstaking without penalty (145ms)
-- ✔ Test that user can't unstake twice (131ms)
-- ✔ Test emergency unstaking without penalty (93ms)
+- ✔ Test unstaking without penalty (79ms)
+- ✔ Test that user can't unstake twice (76ms)
+- ✔ Test emergency unstaking without penalty (57ms)
 - ✔ Test user can't emergency unstaking if he has no stake
-- ✔ Test unstaking without penalty if user has fan tier (114ms)
-- ✔ Test unstaking with penalty (141ms)
-- ✔ Test emergency unstaking with penalty (120ms)
+- ✔ Test unstaking without penalty if user has fan tier (67ms)
+- ✔ Test unstaking with penalty (91ms)
+- ✔ Test emergency unstaking with penalty (74ms)
 - ✔ Check that user can't unstake more than he have
-- ✔ Test reward withdrawing after second stake (144ms)
-- ✔ Test claiming (114ms)
-- ✔ Check that user can't claim is service has no funds (123ms)
-- ✔ Test ticket calculation (206ms)
-- ✔ Test stakers filtering by tier (438ms)
-- ✔ Test ticket info collection (427ms)
-- ✔ Test case if service has no funds (225ms)
+- ✔ Test reward withdrawing after second stake (75ms)
+- ✔ Test claiming (68ms)
+- ✔ Check that user can't claim is service has no funds (77ms)
+- ✔ Test ticket calculation (162ms)
+- ✔ Test stakers info fetching (261ms)
+- ✔ Test null address info fetching
+- ✔ Test ticket info collection (225ms)
+- ✔ Test case if service has no funds (146ms)
 - ✔ Check that admin can't create two pools for the same token
-- ✔ Check pool reward distribution (154ms)
-- ✔ Test staking pausing (158ms)
-- ✔ Test double unstaking (247ms)
+- ✔ Check pool reward distribution (123ms)
+- ✔ Test staking pausing (102ms)
+- ✔ Test double unstaking (181ms)
 - ✔ Test money withdrawing
-- ✔ Test user can't withdraw more money than service have
-- ✔ Test staked token amount correctness (123ms)
-- ✔ Test staking with lower deadline (120ms)
+- ✔ Test user can't withdraw more money than service have 
+- ✔ Test staked token amount correctness (72ms)
+- ✔ Test staking with lower deadline (74ms)
 - ✔ Check zero pending reward in non-zero pools
-- ✔ Test user tier successively changing (666ms)
+- ✔ Check raise per block changing
+- ✔ Check raise per block and allocation points changing
+- ✔ Test that only owner can create a new pool
+- ✔ Test that only owner can withdraw
+- ✔ Test that only owner can set allocation points
+- ✔ Test that only owner can set prenalty percent
+- ✔ Test that only owner can set raise per block
+- ✔ Test that only owner can set required stake for tier
+- ✔ Test that only owner can pause the contract
+- ✔ Test that only owner can unpause the contract
 
-- 73 passing (54s)
 
-| File            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Lines |
-| --------------- | ------- | -------- | ------- | ------- | --------------- |
-| SaleERC20.sol   | 100     | 100      | 100     | 100     |                 |
-| SaleFactory.sol | 100     | 50       | 100     | 100     |                 |
-| Staking.sol     | 98.48   | 93.9     | 92.31   | 98.31   | 123,307,315     |
-| Tier.sol        | 100     | 100      | 100     | 100     |                 |
+- 99 passing (52s)
+
+| File                          |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+|-------------------------------|----------|----------|----------|----------|----------------|
+| SaleERC20.sol                 |      100 |    97.26 |      100 |      100 |                |
+| SaleFactory.sol               |      100 |      100 |      100 |      100 |                |
+| Staking.sol                   |    99.23 |    97.32 |      100 |    99.42 |            134 |
+| Tier.sol                      |      100 |      100 |      100 |      100 |                |
