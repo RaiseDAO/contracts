@@ -1455,14 +1455,13 @@ describe("Sale ERC20", function () {
 
   it("Check user can't buy and owner can't withdraw profit if project is unhealthy", async () => {
     const testAmountToPay = testMaxAllocationPerUser.mul(testTokenPrice).div(oneProjectToken).div(2);
-    await saleERC20.connect(raiseAdmin).setIsUnhealthy(true);
+    await saleERC20.connect(raiseAdmin).setIsUnhealthy();
     await expect(saleERC20.buy(testAmountToPay, 0, [EMPTY_PROOF])).to.be.revertedWith(
       "Project is unhealthy"
     );
     await expect(saleERC20.withdrawRaisedFunds()).to.be.revertedWith(
       "Project is unhealthy"
     );
-    await saleERC20WithdrawVesting.connect(raiseAdmin).setIsUnhealthy(false);
   });
 
   it("Check admin can't set or shit withdraw vesting if it's not enabled", async () => {
@@ -1764,9 +1763,9 @@ describe("Sale ERC20", function () {
       saleERC20WithdrawVesting.connect(raiseAdmin).emergencyWithdrawRaisedFunds()
     ).to.be.revertedWith("Project is healthy");
     await expect(
-      saleERC20WithdrawVesting.setIsUnhealthy(true)
+      saleERC20WithdrawVesting.setIsUnhealthy()
     ).to.be.revertedWith("Caller is not the raise admin");
-    await saleERC20WithdrawVesting.connect(raiseAdmin).setIsUnhealthy(true);
+    await saleERC20WithdrawVesting.connect(raiseAdmin).setIsUnhealthy();
     await expect(saleERC20WithdrawVesting.withdrawRaisedFunds()).to.be.revertedWith(
       "Project is unhealthy"
     );
@@ -1848,7 +1847,7 @@ describe("Sale ERC20", function () {
     await expect(saleERC20WithdrawVesting
       .connect(userTycoon)
       .refund()).to.be.revertedWith("Project is healthy")
-    await saleERC20WithdrawVesting.connect(raiseAdmin).setIsUnhealthy(true);
+    await saleERC20WithdrawVesting.connect(raiseAdmin).setIsUnhealthy();
     await expect(saleERC20WithdrawVesting.withdrawRaisedFunds()).to.be.revertedWith(
       "Project is unhealthy"
     );
@@ -1920,7 +1919,7 @@ describe("Sale ERC20", function () {
 
     await saleERC20WithdrawVesting.withdrawRaisedFunds();
 
-    await saleERC20WithdrawVesting.connect(raiseAdmin).setIsUnhealthy(true);
+    await saleERC20WithdrawVesting.connect(raiseAdmin).setIsUnhealthy();
 
     expect(await saleERC20WithdrawVesting.totalPayTokenWithdrawn()).equal(
       totalDonated.div(2)
@@ -1963,12 +1962,10 @@ describe("Sale ERC20", function () {
   });
 
   it("Check admin can withdraw tokens project tokens if project is unhealthy", async () => {
-    const testAmountToPay = testMaxAllocationPerUser.mul(testTokenPrice).div(oneProjectToken).div(2);
     await expect(
       saleERC20.connect(raiseAdmin).emergencyWithdraw()
     ).to.be.revertedWith("Project is healthy");
-    await saleERC20.connect(raiseAdmin).setIsUnhealthy(true);
-
+    await saleERC20.connect(raiseAdmin).setIsUnhealthy();
 
     const initialRaiseAdminProjectTokenBalance = await raiseToken.balanceOf(
       raiseAdmin.address

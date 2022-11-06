@@ -64,7 +64,8 @@ contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
     event RaisedFundsWithdrawn(uint256 amount, uint256 actualAmount, uint256 fee);
     event RaisedFundsWithdrawnEmergency(uint256 amount);
     event Refunded(address indexed user, uint256 amount);
-    event HealthStatusSet(bool isUnhealthy);
+    event UnhealthStatusSet(bool isUnhealthy);
+    event ServiceFeeSet(uint8 newFeePercent);
 
     modifier onlyRaiseAdmin() {
         require(msg.sender == raiseAdmin, "Caller is not the raise admin");
@@ -392,20 +393,18 @@ contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
     }
 
     /// @notice Marks if there is something wrong with the project
-    /// @param isUnhealthy_ Unhealthy status
-    function setIsUnhealthy(bool isUnhealthy_) public onlyRaiseAdmin {
-        isUnhealthy = isUnhealthy_;
+    function setIsUnhealthy() public onlyRaiseAdmin {
+        isUnhealthy = true;
+        sumToRefundIfUnhealthy = totalPayTokenCollected - totalPayTokenWithdrawn;
 
-        if (isUnhealthy)
-            sumToRefundIfUnhealthy = totalPayTokenCollected - totalPayTokenWithdrawn;
-
-        emit HealthStatusSet(isUnhealthy_);
+        emit UnhealthStatusSet(true);
     }
 
     /// @notice Updates sale fee
     /// @param newFeePercent New service fee percent
     function setServiceFee(uint8 newFeePercent) public onlyRaiseAdmin {
         serviceFeePercent = newFeePercent;
+        emit ServiceFeeSet(newFeePercent);
     }
 
     /// @notice Pauses the contract

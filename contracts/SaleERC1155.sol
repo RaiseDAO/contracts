@@ -63,7 +63,7 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder {
     event RaisedFundsWithdrawn(uint256 amount, uint256 actualAmount, uint256 fee);
     event RaisedFundsWithdrawnEmergency(uint256 amount);
     event Refunded(address indexed user, uint256 amount);
-    event HealthStatusSet(bool isUnhealthy);
+    event UnhealthStatusSet(bool isUnhealthy);
     event ServiceFeeSet(uint8 newFeePercent);
 
     modifier onlyRaiseAdmin() {
@@ -359,7 +359,7 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder {
 
     function setIsUnhealthy() public onlyRaiseAdmin {
         isUnhealthy = true;
-        emit HealthStatusSet(true);
+        emit UnhealthStatusSet(true);
     }
 
     function setServiceFee(uint8 newFeePercent) public onlyRaiseAdmin {

@@ -80,19 +80,6 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "bool",
-        "name": "isUnhealthy",
-        "type": "bool"
-      }
-    ],
-    "name": "HealthStatusSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
         "internalType": "uint8",
         "name": "version",
         "type": "uint8"
@@ -232,6 +219,32 @@
       }
     ],
     "name": "SaleOwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "newFeePercent",
+        "type": "uint8"
+      }
+    ],
+    "name": "ServiceFeeSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "isUnhealthy",
+        "type": "bool"
+      }
+    ],
+    "name": "UnhealthStatusSet",
     "type": "event"
   },
   {
@@ -956,13 +969,7 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "isUnhealthy_",
-        "type": "bool"
-      }
-    ],
+    "inputs": [],
     "name": "setIsUnhealthy",
     "outputs": [],
     "stateMutability": "nonpayable",
