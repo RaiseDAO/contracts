@@ -473,7 +473,7 @@ Then owner can create round by calling
 
   > Use it to shift the already set withdraw schedule for sale owner
 
-- `function setIsUnhealthy(bool isUnhealthy_) public onlyRaiseAdmin`
+- `function setIsUnhealthy() public onlyRaiseAdmin`
   > Use it to mark project unhealthy
 
 #### Constructor
