@@ -10,9 +10,10 @@ import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./Tier.sol";
 
-contract SaleERC1155 is Pausable, Initializable, ERC1155Holder {
+contract SaleERC1155 is Pausable, Initializable, ERC1155Holder, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     struct Round {
@@ -199,7 +200,7 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder {
         rounds[roundId].wasStopped = true;
     }
 
-    function buy(uint256 nftId, uint256 payTokenAmount, uint8 allocationBonusPercent, bytes32[] memory proof) public whenNotPaused onlyHealthy {
+    function buy(uint256 nftId, uint256 payTokenAmount, uint8 allocationBonusPercent, bytes32[] memory proof) public whenNotPaused nonReentrant onlyHealthy {
         Round memory ongoingRound = getOngoingRound();
 
         uint256 projectTokenAmount = payTokenAmount * oneProjectToken / ongoingRound.tokenPrice;
