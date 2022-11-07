@@ -20,6 +20,8 @@ async function deployOnAnyNetwork(hre: HardhatRuntimeEnvironment, contractName: 
         const artifact = await deployer.loadArtifact(contractName);
 
         contract = await deployer.deploy(artifact, constuctorArgs);
+        console.log("Verification arguments", contract.interface.encodeDeploy(constuctorArgs));
+
     } else {
         const Factory = await hre.ethers.getContractFactory(contractName);
         contract = await Factory.deploy(...constuctorArgs);
