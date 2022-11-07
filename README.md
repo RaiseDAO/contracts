@@ -15,8 +15,8 @@
 
 #### zkSync goerli
 
-- Staking address: `0xD9a724b34DAa4EC1bC1e5585D608064C5Ad628c9`
-- Zkscan link: https://explorer.zksync.io/address/0xD9a724b34DAa4EC1bC1e5585D608064C5Ad628c9
+- Staking address: `0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4`
+- Zkscan link: https://explorer.zksync.io/address/0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4
 
 - Token address: `0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83`
 
@@ -41,9 +41,9 @@ This contract contains sushi-like staking implementation architecture described 
 
 - Deploy to testnet:<br>`ZK=1 npx hardhat deployStaking --token-addr 0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83 --raise-per-block 0.25 --network zkSyncTest`
 - Deploy token to testnet:<br>`ZK=1 npx hardhat deployToken --network zkSyncTest`
-- Change owner:<br>`ZK=1 npx hardhat changeStakingOwnerAddr --staking-addr 0xFE0882475E19C6Cf6daC77dB3c592a123b61f461 --new-owner-addr 0x838aec1c2565a5D660BB7F0C540d2632A40B0d5b --network zkSyncTest`
-- Fund service:<br>`ZK=1 npx hardhat fund --staking-addr 0xFE0882475E19C6Cf6daC77dB3c592a123b61f461 --token-addr 0x17fD6bb20E2178d08Df93211362D1d06dBD1f82D --amount 100000.0 --network zkSyncTest`
-- Stake:<br>`ZK=1 npx hardhat stake --staking-addr 0x5077B50F1Ed22c7E24eD8F8E10A3898C38cBb3DB --pool-id 0 --staking-time 0 --amount "1.0" --token-addr 0xc3012E740fff4A3034cBDA8e2bCC7B5b5d6D93CE --network zkSyncTest`
+- Change owner:<br>`ZK=1 npx hardhat changeStakingOwnerAddr --staking-addr 0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4 --new-owner-addr 0x838aec1c2565a5D660BB7F0C540d2632A40B0d5b --network zkSyncTest`
+- Fund service:<br>`ZK=1 npx hardhat fund --staking-addr 0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4 --token-addr 0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83 --amount 100000.0 --network zkSyncTest`
+- Stake:<br>`ZK=1 npx hardhat stake --staking-addr 0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4 --pool-id 0 --staking-time 0 --amount "1.0" --token-addr 0xc3012E740fff4A3034cBDA8e2bCC7B5b5d6D93CE --network zkSyncTest`
 
 ### Usage tips
 
@@ -149,21 +149,17 @@ This contract contains sushi-like staking implementation architecture described 
 
   > Returns pending _RAISE_ tokens reward for user in a pool.
 
-- `function getStakersByTier(Tier tier) public view returns(address[] memory)`
-
-  > Returns staker addresses who have a specific tier
-
-- `function getStakerLotteryInfos(Tier tier) public view returns (StakerLotteryInfo[] memory userInfos)`
-  > Returns stakers by tier with info for the lottery
+- `    function getStakerLotteryInfos(address[] calldata registeredUsers) public view returns (StakerLotteryInfo[] memory userInfos) {`
+  > Returns registered users info for the lottery
 
 ```solidity
 struct StakerLotteryInfo {
-  uint256 tickets;
-  uint256 stakedAt;
-  address user;
-  uint8 allocationBonusPercent;
-}
-
+        uint256 tickets;
+        uint256 stakedAt;
+        address user;
+        uint8 allocationBonusPercent;
+        uint8 tier;
+    }
 ```
 
 - `function getStakedTokenAmount(uint256 poolId) public view returns (uint256)`
@@ -231,7 +227,7 @@ We need to store users of a specific tier to return them for lottery distributio
 
 #### zkSync goerli
 
-- Factory address: `0x61e14227eF05dA292536BA907d2fefbC878F2985`
+- Factory address: `0x47ff15E1843aaC779eE88B54aDEce1b71f4761Ee`
 - Zkscan link: https://zksync2-testnet.zkscan.io/address/0x61e14227eF05dA292536BA907d2fefbC878F2985#code
 
 Contains ERC1967Proxy - based factory pattern implementation. Use it to create new sales.
@@ -248,8 +244,10 @@ Can be used to create ERC20 and ERC1155 sales
 - Deploy project token to zkSync:<br>`ZK=1 npx hardhat deployToken --network zkSyncTest`
 - Deploy pay token to zkSync:<br>`ZK=1 npx hardhat deployUSDC --network zkSyncTest`
 
+- Change sale factory owner on zkSync:<br>`ZK=1 npx hardhat changeSaleFactoryOwnerAddr --factory-addr 0x47ff15E1843aaC779eE88B54aDEce1b71f4761Ee --new-owner-addr 0x838aec1c2565a5D660BB7F0C540d2632A40B0d5b --network zkSyncTest`
 
-- Create ERC20 sale on zkSync:<br>`npx hardhat createSale --factory-addr 0x61e14227eF05dA292536BA907d2fefbC878F2985 --sale-owner 0x2836eC28C32E232280F984d3980BA4e05d6BF68f --sale-type 0 --pay-token-addr 0xBF3d47F19A98D3A1b7c6aa75f88F22C3FE873d41 --project-token-addr 0x17CC238aff7E7a1b4E6Ac431861c5CAC35F0b227  --minimum-amount-to-fund 10000 --is-withdraw-vesting-enabled 0 --service-fee-percent 10 --network zkSyncTest`
+
+- Create ERC20 sale on zkSync:<br>`npx hardhat createSale --factory-addr 0x47ff15E1843aaC779eE88B54aDEce1b71f4761Ee --sale-owner 0x2836eC28C32E232280F984d3980BA4e05d6BF68f --sale-type 0 --pay-token-addr 0xBF3d47F19A98D3A1b7c6aa75f88F22C3FE873d41 --project-token-addr 0x17CC238aff7E7a1b4E6Ac431861c5CAC35F0b227  --minimum-amount-to-fund 10000 --is-withdraw-vesting-enabled 0 --service-fee-percent 10 --network zkSyncTest`
 
 - Create ERC20 sale on arbitrum:<br>`npx hardhat createSale --factory-addr 0xaE8e3813849be020dBE84dC447BC3A818D0e3430 --sale-owner 0x2836eC28C32E232280F984d3980BA4e05d6BF68f --sale-type 0 --pay-token-addr 0x14609E0f716B091b82625A2be6420bb47680C04a --project-token-addr 0x0A1F75C64179a7Ffd41650b8B8567BC4846DB3E6  --minimum-amount-to-fund 10000 --is-withdraw-vesting-enabled 0 --service-fee-percent 10 --network arbitrumTestnet`
 

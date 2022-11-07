@@ -19,15 +19,7 @@ async function deployOnAnyNetwork(hre: HardhatRuntimeEnvironment, contractName: 
         const deployer = new Deployer(hre, wallet);
         const artifact = await deployer.loadArtifact(contractName);
 
-        const depositAmount = ethers.utils.parseEther("0.01");
-        const depositHandle = await deployer.zkWallet.deposit({
-            to: deployer.zkWallet.address,
-            token: utils.ETH_ADDRESS,
-            amount: depositAmount,
-        });
-        await depositHandle.wait();
         contract = await deployer.deploy(artifact, constuctorArgs);
-
     } else {
         const Factory = await hre.ethers.getContractFactory(contractName);
         contract = await Factory.deploy(...constuctorArgs);

@@ -22,12 +22,6 @@ contract FakeToken1 is ERC20 {
     }
 }
 
-contract FakeToken2 is ERC20 {
-    constructor() ERC20("Fake2", "F2") {
-        _mint(msg.sender, 1_000_000 * 10 ** 18);
-    }
-}
-
 contract FakeTokenUSDC is ERC20, Ownable {
     constructor() ERC20("USDC", "USDC") {
         _mint(msg.sender, 1_000_000 * 10 ** 6);
@@ -36,7 +30,6 @@ contract FakeTokenUSDC is ERC20, Ownable {
     function mint(address user, uint256 amount) public onlyOwner {
         _mint(user, amount);
     }
-
 
     function decimals() public view virtual override returns (uint8) {
         return 6;
@@ -52,7 +45,6 @@ contract FakeTokenUSDT is ERC20, Ownable {
         _mint(user, amount);
     }
 
-
     function decimals() public view virtual override returns (uint8) {
         return 6;
     }
@@ -66,7 +58,6 @@ contract FakeTokenDAI is ERC20, Ownable {
     function mint(address user, uint256 amount) public onlyOwner {
         _mint(user, amount);
     }
-
 
     function decimals() public view virtual override returns (uint8) {
         return 18;
