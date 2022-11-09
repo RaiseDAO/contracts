@@ -70,7 +70,6 @@ contract RaiseStore is ERC1155, Ownable {
     }
 }
 
-
 contract RevealableErc1155 is ERC1155, Ownable {
     using SafeERC20 for IERC20;
 
@@ -85,6 +84,35 @@ contract RevealableErc1155 is ERC1155, Ownable {
         address token;
         uint256 price;
         address sellerAddr;
+    }
+    constructor(uint256 serviceFeePromille_) ERC1155("https://api.raisepay.io/nft/{id}.json") {
+        serviceFeePromille = serviceFeePromille_;
+    }
+
+    function changeNftUrl(string calldata uri_) public onlyOwner {
+        _setURI(uri_);
+    }
+
+    function createNft(bytes16 imageHash, address tokenAddr, uint256 price) public returns (uint256 nftId) {
+        nftId = nfts.length;
+        emit NftCreated(msg.sender, nftId);
+        nfts.push(NftInfo(imageHash, tokenAddr, price, msg.sender)); 
+    }
+
+    function buyNft(uint256 id) public {
+        require(id < nfts.length, "No nft with such id");
+        NftInfo memory nft = nfts[id];
+        
+        uint256 fee = nft.price * serviceFeePromille / 1000;
+
+        IERC20(nft.token).safeTransferFrom(msg.sender, nft.sellerAddr, nft.price - fee);
+        IERC20(nft.token).safeTransferFrom(msg.sender, address(this), fee);
+
+        _mint(msg.sender, id, 1, "");
+    }
+
+    function withdraw(address tokenAddr, uint256 amount) public onlyOwner {
+        IERC20(tokenAddr).safeTransfer(msg.sender, amount);
     }
 
     function checkSignature(
@@ -116,35 +144,5 @@ contract RevealableErc1155 is ERC1155, Ownable {
         require(block.timestamp - timestamp < maxTimeDelta, "Expired");
 
         return true;
-    }
-
-    constructor(uint256 serviceFeePromille_) ERC1155("https://api.raisepay.io/nft/{id}.json") {
-        serviceFeePromille = serviceFeePromille_;
-    }
-
-    function changeNftUrl(string calldata uri_) public {
-        _setURI(uri_);
-    }
-
-    function createNft(bytes16 imageHash, address tokenAddr, uint256 price) public returns (uint256 nftId) {
-        nftId = nfts.length;
-        emit NftCreated(msg.sender, nftId);
-        nfts.push(NftInfo(imageHash, tokenAddr, price, msg.sender)); 
-    }
-
-    function buyNft(uint256 id) public {
-        require(id < nfts.length, "No nft with such id");
-        NftInfo memory nft = nfts[id];
-        
-        uint256 fee = nft.price * serviceFeePromille / 1000;
-
-        IERC20(nft.token).safeTransferFrom(msg.sender, nft.sellerAddr, nft.price - fee);
-        IERC20(nft.token).safeTransferFrom(msg.sender, address(this), fee);
-
-        _mint(msg.sender, id, 1, "");
-    }
-
-    function withdraw(address tokenAddr, uint256 amount) public onlyOwner {
-        IERC20(tokenAddr).safeTransfer(msg.sender, amount);
     }
 }
