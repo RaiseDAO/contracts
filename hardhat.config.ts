@@ -7,9 +7,6 @@ import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
 import "hardhat-abi-exporter";
-import "hardhat-contract-sizer";
-import "hardhat-change-network";
-
 import "./tasks/sale";
 import "./tasks/staking";
 import "./tasks/deploy";
