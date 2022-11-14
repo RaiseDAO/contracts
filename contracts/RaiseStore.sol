@@ -114,7 +114,11 @@ contract RaiseStore is ERC1155, Ownable {
 
             require(whitelistedTokens[item.payToken], "Token is not whitelisted");
 
-            if (!allowUnregisteredItems) {
+            // Check either unregistered items are allowed or item is registered
+            require(allowUnregisteredItems || registeredItems[item.itemUUID].itemUUID != 0, "Only registered items allowed");
+
+            // Item is registered
+            if (registeredItems[item.itemUUID].itemUUID != 0) {
                 ShopItem memory registeredItem = registeredItems[item.itemUUID];
 
                 require(registeredItem.payToken == item.payToken, "Invalid paytoken");
