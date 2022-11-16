@@ -50,6 +50,7 @@ task("deployToken", "Deploys test token")
         console.log(`RaiseToken was deployed to ${tokenContract.address}`);
     });
 
+
 task("deployUSDC", "Deploys usdc token ")
     .setAction(async (args, hre) => {
         const tokenContract = await deployOnAnyNetwork(hre, "FakeTokenUSDC");
@@ -97,6 +98,21 @@ task("deployDAI", "Deploys dai token")
 
         console.log(`FakeTokenDAI was deployed to ${tokenContract.address}`);
     });
+
+
+task("deployTRaise", "Deploys TRAISE token")
+    .setAction(async (args, hre) => {
+        const tokenContract = await deployOnAnyNetwork(hre, "FakeTRaise");
+
+        const mintTx = await tokenContract.mint("0x838aec1c2565a5D660BB7F0C540d2632A40B0d5b", ethers.utils.parseEther("1000000"));
+        await mintTx.wait();
+
+        const mintTx2 = await tokenContract.mint("0xf6A501701D3ED860FfADF3FC055179b4600680F5", ethers.utils.parseEther("1000000"));
+        await mintTx2.wait();
+
+        console.log(`FakeTRaise was deployed to ${tokenContract.address}`);
+    });
+
 
 task("deployStaking", "Deploys staking contract on zksync network")
     .addParam("tokenAddr", "Address of the deployed token", "v")

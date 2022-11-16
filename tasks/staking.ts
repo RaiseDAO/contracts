@@ -53,9 +53,9 @@ task("transferToken")
     })
 
 task("fund", "Fund service")
-    .addParam("stakingAddr", "Address of the deployed staking contract", "0x370985919C756677411114b054800D4D6Cb9B01b")
-    .addParam("tokenAddr", "Address of the token", "0xBF3d47F19A98D3A1b7c6aa75f88F22C3FE873d41")
-    .addParam("amount", "Amount", "100000.0")
+    .addParam("stakingAddr", "Address of the deployed staking contract", "0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4")
+    .addParam("tokenAddr", "Address of the token", "0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83")
+    .addParam("amount", "Amount", "10000000.0")
     .setAction(async (args, hre) => {
         const raiseAmount = hre.ethers.utils.parseEther(args['amount']);
         const raiseToken = await hre.ethers.getContractAt("RaiseToken", args['tokenAddr']);
@@ -126,11 +126,12 @@ task("checkTokenOwner")
     })
 
 task("mintToken")
-    .addParam("tokenAddr", "Address of token", "0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4")
-    .addParam("toAddr", "Address og user to mint", "0x2836eC28C32E232280F984d3980BA4e05d6BF68f")
+    .addParam("tokenAddr", "Address of token", "0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83")
+    .addParam("toAddr", "Address og user to mint", "0x838aec1c2565a5D660BB7F0C540d2632A40B0d5b")
+    .addParam("amount", "Amount to mint", "10000000")
     .setAction(async (args, hre) => {
         const raiseToken = await hre.ethers.getContractAt("RaiseToken", args['tokenAddr']);
-        const tx = await raiseToken.mint(args['toAddr'], parseEther("100.0"));
+        const tx = await raiseToken.mint(args['toAddr'], parseEther(args['amount']));
         console.log(tx);
         console.log(await tx.wait());
     })
