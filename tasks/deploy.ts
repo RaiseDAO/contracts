@@ -146,7 +146,7 @@ task("deployRaiseStore", "Deploys raise store")
     });
 
 task("deployPaymaster", "Deploys raise paymaster on zksync network")
-    .addParam("tokenAddr", "Address of the deployed token", "v")
+    .addParam("tokenAddr", "Address of the deployed token", "0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83")
     .addParam("ethToSupply", "Eth amount to send to paymaster", "0.05")
     .setAction(async (args, hre) => {
         const [owner] = await hre.ethers.getSigners();
