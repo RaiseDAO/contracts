@@ -1,6 +1,7 @@
 import { Deployer } from "@matterlabs/hardhat-zksync-deploy";
 import assert from "assert";
 import { ethers } from "ethers";
+import { parseEther } from "ethers/lib/utils";
 import { task, types } from "hardhat/config";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { utils, Wallet } from "zksync-web3";
@@ -142,4 +143,15 @@ task("deployRaiseStore", "Deploys raise store")
     .setAction(async (args, hre) => {
         const raiseStoreContract = await deployOnAnyNetwork(hre, "RaiseStore", [10]);
         console.log(`Raise store deployed to: ${raiseStoreContract.address}`);
+    });
+
+task("deployPaymaster", "Deploys raise paymaster on zksync network")
+    .addParam("tokenAddr", "Address of the deployed token", "v")
+    .addParam("ethToSupply", "Eth amount to send to paymaster", "0.05")
+    .setAction(async (args, hre) => {
+        const [owner] = await hre.ethers.getSigners();
+
+        const raisePaymaster = await deployOnAnyNetwork(hre, "RaisePaymaster", [args['tokenAddr']]);
+        console.log(`Paymaster was deployed to ${raisePaymaster.address}`);
+        await owner.sendTransaction({to: raisePaymaster.address, value: parseEther(args['ethToSupply'])})
     });

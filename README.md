@@ -1,31 +1,29 @@
 # The raise finance project contracts
 
+## Deployed contracts
+
+### ZkSync goerli
+- Staking: `0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4`
+- RAISE: `0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83`
+- USDC: `0x9f4fA1E9C27EfB6FE11DADfC4aa5E50d9ad2D426`
+- USDT: `0x5077B50F1Ed22c7E24eD8F8E10A3898C38cBb3DB`
+- DAI: `0xCECF7296e03F7753ADc58F39c647C90c5458259A`
+- Multicall: `0xc3012E740fff4A3034cBDA8e2bCC7B5b5d6D93CE`
+- Sale factory: `0x47ff15E1843aaC779eE88B54aDEce1b71f4761Ee`
+
+
+
+### Arbitrum 
+
+- Staking: `0x984A8746Bacb613F74FDB9934eba00aD911f3Ed3`
+- RAISE: `0x00eA238b9Afbc808F03a4884CBc88f407489338D`
+- USDC: `0x9b6D5D0fd667E685D73E18E1b8dB8f6245df0f19`
+- USDT: `0x7412fc4d2a3c1c24739845b1079B5bb0097AbBE5`
+- DAI: `0x4B0e8DAfd97679a1e393330F2B112160a97Cee73`
+- Sale factory: `0xaE8e3813849be020dBE84dC447BC3A818D0e3430`
+
+
 ## Staking
-
-#### Arbitrum rinkeby
-
-- Staking address: `0x984A8746Bacb613F74FDB9934eba00aD911f3Ed3`
-- Verification link: https://goerli-rollup-explorer.arbitrum.io/address/0x984A8746Bacb613F74FDB9934eba00aD911f3Ed3#code
-
-- Token address: `0x00eA238b9Afbc808F03a4884CBc88f407489338D`
-
-- USDC address: `0x9b6D5D0fd667E685D73E18E1b8dB8f6245df0f19`
-- USDT address: `0x7412fc4d2a3c1c24739845b1079B5bb0097AbBE5`
-- DAI address: `0x4B0e8DAfd97679a1e393330F2B112160a97Cee73`
-
-#### zkSync goerli
-
-- Staking address: `0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4`
-- Zkscan link: https://explorer.zksync.io/address/0x340ef5D99E792aa66f7B3c277e90629C7D4C73B4
-
-- Token address: `0x790c8945225bbf7340d50c89b3F2a0CF95B3eA83`
-
-- USDC address: `0x9f4fA1E9C27EfB6FE11DADfC4aa5E50d9ad2D426`
-- USDT address: `0x5077B50F1Ed22c7E24eD8F8E10A3898C38cBb3DB`
-- DAI address: `0xCECF7296e03F7753ADc58F39c647C90c5458259A`
-
-- Multicall address: `0xc3012E740fff4A3034cBDA8e2bCC7B5b5d6D93CE`
-
 This contract contains sushi-like staking implementation architecture described bellow in the architecture section. User can stake RAISE tokens or other and get a staking reward. A tier is acqired to user based on staked raise tokens.
 
 ### Useful commands:
@@ -219,17 +217,6 @@ So the user reward in the total period can be calculated as `totalUserReward = u
 We need to store users of a specific tier to return them for lottery distribution. So `mapping(Tier => address[]) public tierStakers` stores stakers by tier. But what happens if user tier changed. We need to remove user old tier info and set the new one. So we need to know user tier info index in `tierStakers` for a specific user. `mapping(address => uint256) public tierStakerPositions` is used for this reason. But what if we want to remove old user info from the middle of `tierStakers`. We need to shift the whole right part of the array to remove the gap which is expensive. Or we can to just write zero address to the gap and fill it with a new value later. `mapping(Tier => uint256[]) public tierStakerGaps` used to save gaps from removed user information and reuse the gaps if new user gets the tier.
 
 ## Sale factory
-
-#### Arbitrum rinkeby
-
-- Factory address: `0xaE8e3813849be020dBE84dC447BC3A818D0e3430`
-- Verification link: https://testnet.arbiscan.io/address/0xaE8e3813849be020dBE84dC447BC3A818D0e3430#code
-
-#### zkSync goerli
-
-- Factory address: `0x47ff15E1843aaC779eE88B54aDEce1b71f4761Ee`
-- Zkscan link: https://zksync2-testnet.zkscan.io/address/0x61e14227eF05dA292536BA907d2fefbC878F2985#code
-
 Contains ERC1967Proxy - based factory pattern implementation. Use it to create new sales.
 Can be used to create ERC20 and ERC1155 sales
 
@@ -324,18 +311,6 @@ Can be used to create ERC20 and ERC1155 sales
   > Returns is sale created by the factory
 
 ## Sale ERC20
-
-#### Arbitrum rinkeby
-
-- Actual address: `0x6cB5368d2fDcCb9Dd3254e0A941Ad74Ac4cA9A8f`
-- Verification link: https://testnet.arbiscan.io/address/0x6cB5368d2fDcCb9Dd3254e0A941Ad74Ac4cA9A8f#code
-
-#### zkSync goerli
-
-- Actual address: `0xAd451F0bAf2a6aA7d8b3F97a4Bd504A9E8A78594`
-- Zkscan link: https://explorer.zksync.io//address/0xAd451F0bAf2a6aA7d8b3F97a4Bd504A9E8A78594
-
-
 This contract contains token sale implementation. Users who staked tokens and acquired tiers can participate in sale. Users get allocation bonus and chances to participate based on their tiers and staking times.
 
 There are two main persons of the sale: sale owner and raise admin. Sale owner is an integrated project representative. He manages the sale while there are no emergency situations. If there are any problems with the project, raise admin can manage the situation by setting withdraw vesting or marking project as an unhealthy.
