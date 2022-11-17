@@ -211,6 +211,16 @@ task("stopRound", "Stop ongoing round")
     console.log(await tx.wait());
   });
 
+task("getOngoingRound", "Get ongoing round")
+  .addParam("saleAddr", "Address of the deployed sale contract", "0x44b9315f3207C8dB1Fe252B752ec74C9BF835eA5")
+  .setAction(async (args, hre) => {
+    const sale = await hre.ethers.getContractAt("SaleERC20", args["saleAddr"]);
+    const round = await sale.getOngoingRound();
+    console.log(round)
+
+    const isFinished = await sale.isSaleFinished()
+    console.log(`Is finished: ${isFinished}`)
+  });
 
 task("balanceOf", "Balance of token")
   .addParam("tokenAddr", "")

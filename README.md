@@ -472,21 +472,6 @@ Then owner can create round by calling
 - `function getOngoingRound() public view returns (Round memory)`
 > Returns ongoing round if launched
 
--
-```solidity
-    function getOngoingRoundInfo()
-        public view
-        returns (
-            uint256 id,
-            uint256 deadline,
-            Tier requiredTier,
-            uint256 tokenPrice,
-            uint256 maxAllocation,
-            uint256 maxAllocationPerUser
-        )
-```
-
-> Like previous one buy more handy for frontend I guess
 
 - `function canParticipate(address user) public view returns (bool)`
 

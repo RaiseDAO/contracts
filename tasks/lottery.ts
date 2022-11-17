@@ -81,6 +81,14 @@ export class LotteryManager {
   }
 }
 
+function chunks<T>(a: T[], size: number){
+    return Array.from(
+        new Array(Math.ceil(a.length / size)),
+        (_, i) => a.slice(i * size, i * size + size)
+    );
+  }
+
+
 task("lottery", "Start the lottery")
   .addParam("stakingAddr", "Address of the deployed staking contract", "0x556b26Afad1926856ff436d3E95B5D210FCbFFE1")
   .addParam("tier", "Required tier for lottery", Tier.Tycoon, types.int)
@@ -91,7 +99,13 @@ task("lottery", "Start the lottery")
     const staking = await hre.ethers.getContractAt("Staking", args['stakingAddr']);
     const registeredUsers = args['registeredUsers'].split(',');
     const usersToChooseNum = args["usersToChooseNum"];
-    const queriedStakers = await staking.getStakerLotteryInfos(registeredUsers);
+
+    const queriedStakers = [];
+
+    for (const page in chunks(registeredUsers, 180)) {
+      const queriedStakersPage = await staking.getStakerLotteryInfos(page);
+      queriedStakers.push(...queriedStakersPage);
+    }
 
     const lottery = new LotteryManager();
 

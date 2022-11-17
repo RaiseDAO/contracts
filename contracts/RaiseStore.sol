@@ -75,6 +75,7 @@ contract RaiseStore is ERC1155, Ownable {
         for(uint256 i = 0; i < items.length; i++) {
             ShopItem memory item = items[i];
 
+            require(item.sellerAddr == msg.sender, "Seller must be the sender");
             require(item.itemUUID != 0, "Item id can't be zero");
             require(registeredItems[item.itemUUID].itemUUID == 0, "Item already registered");
             require(whitelistedTokens[item.payToken], "Token is not whitelisted");

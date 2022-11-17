@@ -387,26 +387,6 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder, ReentrancyGuard 
         return round;
     }
 
-    function getOngoingRoundInfo() 
-        public view 
-        returns (
-            uint256 id, 
-            uint256 deadline, 
-            Tier requiredTier,
-            uint256 tokenPrice, 
-            uint256 maxAllocation, 
-            uint256 maxAllocationPerUser
-        ) 
-    {
-        Round memory ongoingRound = getOngoingRound();
-        id = ongoingRound.id;
-        deadline = ongoingRound.deadline;
-        tokenPrice = ongoingRound.tokenPrice;
-        requiredTier = ongoingRound.requiredTier;
-        maxAllocation = ongoingRound.maxAllocation;
-        maxAllocationPerUser = ongoingRound.maxAllocationPerUser;
-    }
-
     function canParticipate(address user, uint8 allocationBonusPercent, bytes32[] memory proof) public view returns (bool) {
         Round memory round = getOngoingRound();
         return MerkleProof.verify(proof, round.usersInfoRoot, keccak256(abi.encodePacked(user, allocationBonusPercent)));

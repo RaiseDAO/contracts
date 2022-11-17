@@ -633,6 +633,10 @@ describe("Staking", function () {
     expect(queriedMetchantLotteryInfo[0].tickets).to.equal(fanTickets1);
     const [fanTickets2, ] = await staking.getUserInfo(queriedMetchantLotteryInfo[1].user);
     expect(queriedMetchantLotteryInfo[1].tickets).to.equal(fanTickets2);
+
+    const queriedNullAddressInfo = await staking.getStakerLotteryInfos([NULL_ADDRESS]);
+    expect(queriedNullAddressInfo[0].user == owner.address);
+    expect(queriedNullAddressInfo[0].tier == Tier.None);
   });
 
   it("Test null address info fetching", async () => {

@@ -427,28 +427,7 @@ contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
         require(!round.wasStopped, "No active rounds");
 
         return round;
-    }
-
-    /// @notice Returns ongoing round info for frontend
-    function getOngoingRoundInfo() 
-        public view 
-        returns (
-            uint256 id, 
-            uint256 deadline, 
-            Tier requiredTier,
-            uint256 tokenPrice, 
-            uint256 maxAllocation, 
-            uint256 maxAllocationPerUser
-        ) 
-    {
-        Round memory ongoingRound = getOngoingRound();
-        id = ongoingRound.id;
-        deadline = ongoingRound.deadline;
-        tokenPrice = ongoingRound.tokenPrice;
-        requiredTier = ongoingRound.requiredTier;
-        maxAllocation = ongoingRound.maxAllocation;
-        maxAllocationPerUser = ongoingRound.maxAllocationPerUser;
-    }
+    } 
 
     /// @notice Is user can participate
     function canParticipate(address user, uint8 allocationBonusPercent, bytes32[] memory proof) public view returns (bool) {

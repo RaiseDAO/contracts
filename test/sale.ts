@@ -661,8 +661,6 @@ describe("Sale ERC20", function () {
     expect(finalTotalProjectTokenSold).to.equal(testMaxAllocationPerUser);
     expect(finalTotalPayTokenCollected).to.equal(initialTotalPayTokenCollected.add(testAmountToPay));
 
-    //const [roundId, deadline, requiredTier, tokenPrice, maxAllocation, maxAllocationPerUser] = await saleERC20.getOngoingRoundInfo();
-    const round = await saleERC20.getOngoingRound();
     expect(await saleERC20.totalPayTokenCollected()).to.equal(testAmountToPay);
     expect(await saleERC20.totalRaised()).to.equal(testAmountToPay);
     expect(await saleERC20.totalPayTokenWithdrawn()).to.equal(0);
@@ -1299,7 +1297,7 @@ describe("Sale ERC20", function () {
     let rootHash = "0x" + merkleTree.getRoot().toString('hex');
     const proof = merkleTree.getHexProof(leaves[0]);
 
-    await expect(saleERC20.getOngoingRoundInfo()).to.be.revertedWith(
+    await expect(saleERC20.getOngoingRound()).to.be.revertedWith(
       "No rounds created"
     );
 
@@ -1315,7 +1313,7 @@ describe("Sale ERC20", function () {
         rootHash
       );
     await saleERC20.connect(raiseAdmin).stopRound(firstRoundId);
-    await expect(saleERC20.getOngoingRoundInfo()).to.be.revertedWith(
+    await expect(saleERC20.getOngoingRound()).to.be.revertedWith(
       "No active rounds"
     );
 
@@ -1332,7 +1330,7 @@ describe("Sale ERC20", function () {
       );
     await ethers.provider.send("evm_increaseTime", [testPeriodSeconds + 10]);
     await ethers.provider.send("evm_mine", []);
-    await expect(saleERC20.getOngoingRoundInfo()).to.be.revertedWith(
+    await expect(saleERC20.getOngoingRound()).to.be.revertedWith(
       "Round ended"
     );
 
@@ -1347,14 +1345,14 @@ describe("Sale ERC20", function () {
         false,
         rootHash
       );
-    const [
+    const {      
       id,
       deadline,
       requiredTier,
       tokenPrice,
       maxAllocation,
       maxAllocationPerUser,
-    ] = await saleERC20.getOngoingRoundInfo();
+     } = await saleERC20.getOngoingRound();
     expect(id).to.equal(2);
     expect(requiredTier).to.equal(testTier);
     expect(tokenPrice).to.equal(testTokenPrice);

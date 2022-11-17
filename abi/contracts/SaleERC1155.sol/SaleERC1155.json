@@ -665,44 +665,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getOngoingRoundInfo",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "id",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "deadline",
-        "type": "uint256"
-      },
-      {
-        "internalType": "enum Tier",
-        "name": "requiredTier",
-        "type": "uint8"
-      },
-      {
-        "internalType": "uint256",
-        "name": "tokenPrice",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maxAllocation",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "maxAllocationPerUser",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
