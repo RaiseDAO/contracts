@@ -13,43 +13,50 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract RaiseStore is ERC1155, Ownable {
     using SafeERC20 for IERC20;
 
+    struct Store {
+        uint256 id;
+        bool isDynamicProductsAllowed;
+        bool isDynamicSellerAllowed;
+        address owner;
+    }
+
     struct UserOrder {
-        uint128 shopUUID;
+        uint256 storeId;
         address sellerAddr;
         uint256 userId;
         OrderItem[] items;
     }
 
     struct OrderItem {
-        uint128 itemUUID;
-        uint32 amount;
+        uint256 storeId;
+        uint256 collectionId;
+        uint256 productId;
         address payToken;
-        uint256 itemPrice;
+        uint256 price;
+        uint256 amount;
         bytes32 additionalInfo;
     }
 
-    struct ShopItem {
-        uint128 shopUUID;
-        uint128 itemUUID;
-        address sellerAddr;
-        address payToken;
+    struct StoreProduct {
+        uint256 collectionId;
+        uint256 productId;
         bool isAvaiable;
-        uint256 itemPrice;
+        address payToken;
+        uint256 price;
         bytes32 additionalInfo;
     }
 
     event UserBought(address sellerAddr, UserOrder order);
     event TokenWhitelisted(address token);
     event TokenBlacklisted(address token);
-    event ItemRegistered(uint128 itemUUID, ShopItem item);
-    event ItemEdited(uint128 itemUUID, ShopItem item);
-    event ItemDeleted(uint128 itemUUID);
+    event ProductRegistered(uint256 collectionId, uint256 productId, StoreProduct product);
 
     uint256 public serviceFeePromille;
+    mapping(uint256 => Store) public stores;  // store id => store
+    mapping(uint256 => mapping(uint256 => mapping(uint256 => StoreProduct))) public products;  // store id => collection id => product id => item
     mapping(address => bool) public whitelistedTokens;
-    mapping(uint128 => ShopItem) public registeredItems;
 
-    constructor(uint256 serviceFeePromille_) ERC1155("https://api.raisepay.io/item/{id}.json") {
+    constructor(uint256 serviceFeePromille_) ERC1155("https://api.raisepay.io/product/{id}.json") {
         serviceFeePromille = serviceFeePromille_;
     }
 
@@ -71,65 +78,56 @@ contract RaiseStore is ERC1155, Ownable {
         }
     }
 
-    function registerItems(ShopItem[] calldata items) public {
-        for(uint256 i = 0; i < items.length; i++) {
-            ShopItem memory item = items[i];
+    function setProducts(uint256 storeId, StoreProduct[] calldata productsToRegister) public {
+        Store memory store = stores[storeId];
 
-            require(item.sellerAddr == msg.sender, "Seller must be the sender");
-            require(item.itemUUID != 0, "Item id can't be zero");
-            require(registeredItems[item.itemUUID].itemUUID == 0, "Item already registered");
-            require(whitelistedTokens[item.payToken], "Token is not whitelisted");
+        require(store.owner == msg.sender, "You're not the store owner");
 
-            registeredItems[item.itemUUID] = item;
-            emit ItemRegistered(item.itemUUID, item);
+        for(uint256 i = 0; i < productsToRegister.length; i++) {
+            StoreProduct memory product = productsToRegister[i];
+
+            require(whitelistedTokens[product.payToken], "Token is not whitelisted");
+
+            products[storeId][product.collectionId][product.productId] = product;
+            emit ProductRegistered(product.collectionId, product.productId, product);
         }
     }
 
-    function editRegisteredItems(ShopItem[] calldata items) public {
-        for(uint256 i = 0; i < items.length; i++) {
-            ShopItem memory item = items[i];
+    function setProductsAvailability(uint256 storeId, StoreProduct[] calldata productsToRegister) public {
+        Store memory store = stores[storeId];
+        
+        require(store.owner == msg.sender, "You're not the store owner");
 
-            require(item.itemUUID != 0, "Item id can't be zero");
-            require(msg.sender == registeredItems[item.itemUUID].sellerAddr, "Only owner can edit item");
-            require(registeredItems[item.itemUUID].itemUUID != 0, "Item not found");
-            require(whitelistedTokens[item.payToken], "Token is not whitelisted");
-
-            registeredItems[item.itemUUID] = item;
-            emit ItemEdited(item.itemUUID, item);
+        for(uint256 i = 0; i < productsToRegister.length; i++) {
+            StoreProduct memory product = productsToRegister[i];
+            products[storeId][product.collectionId][product.productId].isAvaiable = product.isAvaiable;
+            emit ProductRegistered(product.collectionId, product.productId, product);
         }
     }
 
-    function deleteRegisteredItems(uint128[] calldata itemsToDelete) public {
-        for(uint256 i = 0; i < itemsToDelete.length; i++) {
-            require(msg.sender == registeredItems[itemsToDelete[i]].sellerAddr, "Only owner can edit item");
+    function buy(UserOrder calldata order) public {
+        Store memory store = stores[order.storeId];
 
-            delete registeredItems[itemsToDelete[i]];
+        require(store.owner == order.sellerAddr || store.isDynamicSellerAllowed, "Invalid seller address");
 
-            emit ItemDeleted(itemsToDelete[i]);
-        }
-    }
-
-    function buy(UserOrder calldata order, bool allowUnregisteredItems) public {
         for(uint256 i = 0; i < order.items.length; i++) {
             OrderItem memory item = order.items[i];
+            StoreProduct memory registeredProduct = products[order.storeId][item.collectionId][item.productId];
 
             require(whitelistedTokens[item.payToken], "Token is not whitelisted");
 
             // Check either unregistered items are allowed or item is registered
-            require(allowUnregisteredItems || registeredItems[item.itemUUID].itemUUID != 0, "Only registered items allowed");
+            require(store.isDynamicProductsAllowed || registeredProduct.isAvaiable , "Only registered items allowed");
 
             // Item is registered
-            if (registeredItems[item.itemUUID].itemUUID != 0) {
-                ShopItem memory registeredItem = registeredItems[item.itemUUID];
-
-                require(registeredItem.payToken == item.payToken, "Invalid paytoken");
-                require(registeredItem.itemPrice == item.itemPrice, "Invalid price");
-                require(registeredItem.sellerAddr == order.sellerAddr, "Invalid seller address");
-                require(registeredItem.isAvaiable, "Item is not available");
+            if (registeredProduct.isAvaiable) {
+                require(registeredProduct.payToken == item.payToken, "Invalid paytoken");
+                require(registeredProduct.price == item.price, "Invalid price");
+                require(registeredProduct.isAvaiable, "Item is not available");
             }
 
-            _mint(msg.sender, item.itemUUID, item.amount, "");
-            uint256 sum = item.amount * item.itemPrice;
+            _mint(msg.sender, uint256(keccak256(abi.encodePacked(item.storeId, item.collectionId, item.productId))), item.amount, "");
+            uint256 sum = item.amount * item.price;
             uint256 fee = sum * serviceFeePromille / 1000;
 
             IERC20(item.payToken).safeTransferFrom(msg.sender, order.sellerAddr, sum - fee);
@@ -145,7 +143,9 @@ contract RaiseStore is ERC1155, Ownable {
 
     function checkSignature(
         address userAddress, 
-        uint128 itemUUID, 
+        uint256 storeId, 
+        uint256 collectionId, 
+        uint256 productId, 
         uint8 v, 
         bytes32 r, 
         bytes32 s, 
@@ -154,12 +154,7 @@ contract RaiseStore is ERC1155, Ownable {
     ) 
         public view returns (bool)
     {
-        
-        ShopItem memory registeredItem = registeredItems[itemUUID];
-
-        require(registeredItem.itemUUID != 0, "Item not found");
-
-        uint256 balance = balanceOf(userAddress, itemUUID);
+        uint256 balance = balanceOf(userAddress, uint256(keccak256(abi.encodePacked(storeId, collectionId, productId))));
         
         require(balance > 0, "User haven't got nft");
 
