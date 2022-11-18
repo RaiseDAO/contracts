@@ -59,6 +59,10 @@ contract RaiseStore is ERC1155, Ownable {
         serviceFeePromille = serviceFeePromille_;
     }
 
+    function setServiceFee(uint256 serviceFeePromille_) public onlyOwner {
+        serviceFeePromille = serviceFeePromille_;
+    }
+
     function changeNftUrl(string calldata uri_) public onlyOwner {
         _setURI(uri_);
     }

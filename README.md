@@ -20,7 +20,7 @@
 - USDT: `0x7412fc4d2a3c1c24739845b1079B5bb0097AbBE5`
 - DAI: `0x4B0e8DAfd97679a1e393330F2B112160a97Cee73`
 - Sale factory: `0xaE8e3813849be020dBE84dC447BC3A818D0e3430`
-
+- Raise store: `0xDa0eA30F4ce2ea235147719994EE271562B04Fa2`
 
 ## Staking
 This contract contains sushi-like staking implementation architecture described bellow in the architecture section. User can stake RAISE tokens or other and get a staking reward. A tier is acqired to user based on staked raise tokens.
