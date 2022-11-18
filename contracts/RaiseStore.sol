@@ -49,6 +49,10 @@ contract RaiseStore is ERC1155, Ownable {
     event TokenWhitelisted(address token);
     event TokenBlacklisted(address token);
     event ProductRegistered(uint256 collectionId, uint256 productId, StoreProduct product);
+    event ServiceFeeSet(uint256 serviceFeePromille);
+    event StoreCreated(uint256 storeId, Store store);
+    event StoreOwnerChanged(uint256 storeId, address newOwner);
+    event NftUrlChanged(string uri);
 
     uint256 public serviceFeePromille;
     Store[] public stores;
@@ -61,10 +65,12 @@ contract RaiseStore is ERC1155, Ownable {
 
     function setServiceFee(uint256 serviceFeePromille_) public onlyOwner {
         serviceFeePromille = serviceFeePromille_;
+        emit ServiceFeeSet(serviceFeePromille_);
     }
 
     function changeNftUrl(string calldata uri_) public onlyOwner {
         _setURI(uri_);
+        emit NftUrlChanged(uri_);
     }
 
     function whitelistTokens(address[] calldata tokens) public onlyOwner {
@@ -82,8 +88,23 @@ contract RaiseStore is ERC1155, Ownable {
     }
 
     function createStore(bool isDynamicProductsAllowed, bool isDynamicSellerAllowed) public {
-        stores.push(Store(isDynamicProductsAllowed, isDynamicSellerAllowed, msg.sender));
+        uint256 storeId = stores.length;
+        Store memory store = Store(isDynamicProductsAllowed, isDynamicSellerAllowed, msg.sender);
+
+        stores.push(store);
+
+        emit StoreCreated(storeId, store);
     }
+
+    function changeStoreOwner(uint256 storeId, address newOwner) public {
+        Store storage store = stores[storeId];
+
+        require(store.owner == msg.sender, "Not the owner");
+
+        store.owner = newOwner;
+
+        emit StoreOwnerChanged(storeId, newOwner);
+    } 
 
     function setProducts(uint256 storeId, StoreProduct[] calldata productsToRegister) public {
         Store memory store = stores[storeId];

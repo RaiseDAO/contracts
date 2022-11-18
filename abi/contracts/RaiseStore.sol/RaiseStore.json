@@ -39,6 +39,19 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": false,
+        "internalType": "string",
+        "name": "uri",
+        "type": "string"
+      }
+    ],
+    "name": "NftUrlChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -109,6 +122,74 @@
       }
     ],
     "name": "ProductRegistered",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "serviceFeePromille",
+        "type": "uint256"
+      }
+    ],
+    "name": "ServiceFeeSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "storeId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "bool",
+            "name": "isDynamicProductsAllowed",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "isDynamicSellerAllowed",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct RaiseStore.Store",
+        "name": "store",
+        "type": "tuple"
+      }
+    ],
+    "name": "StoreCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "storeId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "StoreOwnerChanged",
     "type": "event"
   },
   {
@@ -450,6 +531,24 @@
       }
     ],
     "name": "changeNftUrl",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "storeId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "changeStoreOwner",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -822,6 +921,19 @@
       }
     ],
     "name": "setProductsAvailability",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "serviceFeePromille_",
+        "type": "uint256"
+      }
+    ],
+    "name": "setServiceFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -11,6 +11,7 @@ import "./tasks/sale";
 import "./tasks/staking";
 import "./tasks/deploy";
 import "./tasks/lottery";
+import "./tasks/store";
 
 import "@matterlabs/hardhat-zksync-deploy";
 import "@matterlabs/hardhat-zksync-solc";

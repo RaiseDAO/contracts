@@ -3,10 +3,6 @@ import { keccak256, parseEther, parseUnits, solidityPack } from "ethers/lib/util
 import { task, types } from "hardhat/config";
 import MerkleTree from "merkletreejs";
 
-enum SaleType {
-  ERC20 = 0,
-  ERC1155 = 1,
-}
 
 task("createSale", "Creates new round")
   .addParam("factoryAddr", "Address of the deployed factory contract")
@@ -33,7 +29,6 @@ task("createSale", "Creates new round")
     10,
     types.int
   )
-
   .setAction(async (args, hre) => {
     const factory = await hre.ethers.getContractAt(
       "SaleFactory",
@@ -49,10 +44,7 @@ task("createSale", "Creates new round")
       args["isWithdrawVestingEnabled"],
       args["serviceFeePercent"]
     );
-
-    console.log(tx);
     const rc = await tx.wait();
-    console.log(rc);
 
     console.log(
       `Sale created. Address: ${rc.events?.find((x) => x.event == "SaleCreated")?.args![0]
@@ -64,7 +56,6 @@ task("fundSale", "Funds sale with tokens")
   .addParam("saleAddr", "Address of the deployed sale contract")
   .addParam("tokenAddr", "Sale Token Address")
   .addParam("tokenAmount", "Sale Token Amount")
-
   .setAction(async (args, hre) => {
     const sale = await hre.ethers.getContractAt("SaleERC20", args["saleAddr"]);
     const payToken = await hre.ethers.getContractAt(
@@ -78,8 +69,6 @@ task("fundSale", "Funds sale with tokens")
     console.log(tx);
     console.log(await tx.wait());
   });
-
-
 
 task("createRound", "Creates new round")
   .addParam("saleAddr", "Address of the deployed sale contract")
@@ -199,8 +188,6 @@ task("buy", "Creates new round")
     console.log(await tx.wait());
   });
 
-
-
 task("stopRound", "Stop ongoing round")
   .addParam("saleAddr", "Address of the deployed sale contract")
   .setAction(async (args, hre) => {
@@ -233,20 +220,20 @@ task("balanceOf", "Balance of token")
     console.log(await token.balanceOf(args["userAddr"]));
   });
 
-  task("changeSaleFactoryOwnerAddr", "Changes sale factory owner address")
-    .addParam("factoryAddr", "Address of the deployed staking contract")
-    .addParam("newOwnerAddr", "Address of user to grand permissions")
-    .setAction(async (args, hre) => {
-        const saleFactory = await hre.ethers.getContractAt("SaleFactory", args['factoryAddr']);
-        const tx = await saleFactory.transferOwnership(args['newOwnerAddr']);
+task("changeSaleFactoryOwnerAddr", "Changes sale factory owner address")
+  .addParam("factoryAddr", "Address of the deployed staking contract")
+  .addParam("newOwnerAddr", "Address of user to grand permissions")
+  .setAction(async (args, hre) => {
+    const saleFactory = await hre.ethers.getContractAt("SaleFactory", args['factoryAddr']);
+    const tx = await saleFactory.transferOwnership(args['newOwnerAddr']);
 
-        console.log(tx);
-        console.log(await tx.wait());
-    });
+    console.log(tx);
+    console.log(await tx.wait());
+  });
 
-    task("getFactoryOwner", "Changes staking owner address")
-    .addParam("factoryAddr", "Address of the deployed staking contract")
-    .setAction(async (args, hre) => {
-        const saleFactory = await hre.ethers.getContractAt("SaleFactory", args['factoryAddr']);
-        console.log(await saleFactory.owner());
-    });
+task("getFactoryOwner", "Changes staking owner address")
+  .addParam("factoryAddr", "Address of the deployed staking contract")
+  .setAction(async (args, hre) => {
+    const saleFactory = await hre.ethers.getContractAt("SaleFactory", args['factoryAddr']);
+    console.log(await saleFactory.owner());
+  });
