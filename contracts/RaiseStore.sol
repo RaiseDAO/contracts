@@ -14,7 +14,6 @@ contract RaiseStore is ERC1155, Ownable {
     using SafeERC20 for IERC20;
 
     struct Store {
-        uint256 id;
         bool isDynamicProductsAllowed;
         bool isDynamicSellerAllowed;
         address owner;
@@ -52,7 +51,7 @@ contract RaiseStore is ERC1155, Ownable {
     event ProductRegistered(uint256 collectionId, uint256 productId, StoreProduct product);
 
     uint256 public serviceFeePromille;
-    mapping(uint256 => Store) public stores;  // store id => store
+    Store[] public stores;
     mapping(uint256 => mapping(uint256 => mapping(uint256 => StoreProduct))) public products;  // store id => collection id => product id => item
     mapping(address => bool) public whitelistedTokens;
 
@@ -76,6 +75,10 @@ contract RaiseStore is ERC1155, Ownable {
             whitelistedTokens[tokens[i]] = false;
             emit TokenBlacklisted(tokens[i]);
         }
+    }
+
+    function createStore(bool isDynamicProductsAllowed, bool isDynamicSellerAllowed) public {
+        stores.push(Store(isDynamicProductsAllowed, isDynamicSellerAllowed, msg.sender));
     }
 
     function setProducts(uint256 storeId, StoreProduct[] calldata productsToRegister) public {

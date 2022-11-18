@@ -39,131 +39,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint128",
-        "name": "itemUUID",
-        "type": "uint128"
-      }
-    ],
-    "name": "ItemDeleted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint128",
-        "name": "itemUUID",
-        "type": "uint128"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "shopUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "itemUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "address",
-            "name": "sellerAddr",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "payToken",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "isAvaiable",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "itemPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "additionalInfo",
-            "type": "bytes32"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct RaiseStore.ShopItem",
-        "name": "item",
-        "type": "tuple"
-      }
-    ],
-    "name": "ItemEdited",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint128",
-        "name": "itemUUID",
-        "type": "uint128"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "shopUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "itemUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "address",
-            "name": "sellerAddr",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "payToken",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "isAvaiable",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "itemPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "additionalInfo",
-            "type": "bytes32"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct RaiseStore.ShopItem",
-        "name": "item",
-        "type": "tuple"
-      }
-    ],
-    "name": "ItemRegistered",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -177,6 +52,63 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collectionId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "collectionId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "productId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvaiable",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "payToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "additionalInfo",
+            "type": "bytes32"
+          }
+        ],
+        "indexed": false,
+        "internalType": "struct RaiseStore.StoreProduct",
+        "name": "product",
+        "type": "tuple"
+      }
+    ],
+    "name": "ProductRegistered",
     "type": "event"
   },
   {
@@ -310,9 +242,9 @@
       {
         "components": [
           {
-            "internalType": "uint128",
-            "name": "shopUUID",
-            "type": "uint128"
+            "internalType": "uint256",
+            "name": "storeId",
+            "type": "uint256"
           },
           {
             "internalType": "address",
@@ -327,14 +259,19 @@
           {
             "components": [
               {
-                "internalType": "uint128",
-                "name": "itemUUID",
-                "type": "uint128"
+                "internalType": "uint256",
+                "name": "storeId",
+                "type": "uint256"
               },
               {
-                "internalType": "uint32",
-                "name": "amount",
-                "type": "uint32"
+                "internalType": "uint256",
+                "name": "collectionId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "productId",
+                "type": "uint256"
               },
               {
                 "internalType": "address",
@@ -343,7 +280,12 @@
               },
               {
                 "internalType": "uint256",
-                "name": "itemPrice",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
                 "type": "uint256"
               },
               {
@@ -432,9 +374,9 @@
       {
         "components": [
           {
-            "internalType": "uint128",
-            "name": "shopUUID",
-            "type": "uint128"
+            "internalType": "uint256",
+            "name": "storeId",
+            "type": "uint256"
           },
           {
             "internalType": "address",
@@ -449,14 +391,19 @@
           {
             "components": [
               {
-                "internalType": "uint128",
-                "name": "itemUUID",
-                "type": "uint128"
+                "internalType": "uint256",
+                "name": "storeId",
+                "type": "uint256"
               },
               {
-                "internalType": "uint32",
-                "name": "amount",
-                "type": "uint32"
+                "internalType": "uint256",
+                "name": "collectionId",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "productId",
+                "type": "uint256"
               },
               {
                 "internalType": "address",
@@ -465,7 +412,12 @@
               },
               {
                 "internalType": "uint256",
-                "name": "itemPrice",
+                "name": "price",
+                "type": "uint256"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
                 "type": "uint256"
               },
               {
@@ -482,11 +434,6 @@
         "internalType": "struct RaiseStore.UserOrder",
         "name": "order",
         "type": "tuple"
-      },
-      {
-        "internalType": "bool",
-        "name": "allowUnregisteredItems",
-        "type": "bool"
       }
     ],
     "name": "buy",
@@ -515,9 +462,19 @@
         "type": "address"
       },
       {
-        "internalType": "uint128",
-        "name": "itemUUID",
-        "type": "uint128"
+        "internalType": "uint256",
+        "name": "storeId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "collectionId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
       },
       {
         "internalType": "uint8",
@@ -559,62 +516,17 @@
   {
     "inputs": [
       {
-        "internalType": "uint128[]",
-        "name": "itemsToDelete",
-        "type": "uint128[]"
-      }
-    ],
-    "name": "deleteRegisteredItems",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "bool",
+        "name": "isDynamicProductsAllowed",
+        "type": "bool"
+      },
       {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "shopUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "itemUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "address",
-            "name": "sellerAddr",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "payToken",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "isAvaiable",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "itemPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "additionalInfo",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct RaiseStore.ShopItem[]",
-        "name": "items",
-        "type": "tuple[]"
+        "internalType": "bool",
+        "name": "isDynamicSellerAllowed",
+        "type": "bool"
       }
     ],
-    "name": "editRegisteredItems",
+    "name": "createStore",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -659,82 +571,32 @@
   {
     "inputs": [
       {
-        "components": [
-          {
-            "internalType": "uint128",
-            "name": "shopUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "uint128",
-            "name": "itemUUID",
-            "type": "uint128"
-          },
-          {
-            "internalType": "address",
-            "name": "sellerAddr",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "payToken",
-            "type": "address"
-          },
-          {
-            "internalType": "bool",
-            "name": "isAvaiable",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "itemPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bytes32",
-            "name": "additionalInfo",
-            "type": "bytes32"
-          }
-        ],
-        "internalType": "struct RaiseStore.ShopItem[]",
-        "name": "items",
-        "type": "tuple[]"
-      }
-    ],
-    "name": "registerItems",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint128",
+        "internalType": "uint256",
         "name": "",
-        "type": "uint128"
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "registeredItems",
+    "name": "products",
     "outputs": [
       {
-        "internalType": "uint128",
-        "name": "shopUUID",
-        "type": "uint128"
+        "internalType": "uint256",
+        "name": "collectionId",
+        "type": "uint256"
       },
       {
-        "internalType": "uint128",
-        "name": "itemUUID",
-        "type": "uint128"
-      },
-      {
-        "internalType": "address",
-        "name": "sellerAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "payToken",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "productId",
+        "type": "uint256"
       },
       {
         "internalType": "bool",
@@ -742,8 +604,13 @@
         "type": "bool"
       },
       {
+        "internalType": "address",
+        "name": "payToken",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
-        "name": "itemPrice",
+        "name": "price",
         "type": "uint256"
       },
       {
@@ -857,6 +724,135 @@
     "name": "setApprovalForAll",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "storeId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "collectionId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "productId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvaiable",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "payToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "additionalInfo",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct RaiseStore.StoreProduct[]",
+        "name": "productsToRegister",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setProducts",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "storeId",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "collectionId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "productId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isAvaiable",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "payToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "price",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "additionalInfo",
+            "type": "bytes32"
+          }
+        ],
+        "internalType": "struct RaiseStore.StoreProduct[]",
+        "name": "productsToRegister",
+        "type": "tuple[]"
+      }
+    ],
+    "name": "setProductsAvailability",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "stores",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "isDynamicProductsAllowed",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "isDynamicSellerAllowed",
+        "type": "bool"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
