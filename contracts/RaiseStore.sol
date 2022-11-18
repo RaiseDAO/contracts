@@ -27,7 +27,6 @@ contract RaiseStore is ERC1155, Ownable {
     }
 
     struct OrderItem {
-        uint256 storeId;
         uint256 collectionId;
         uint256 productId;
         address payToken;
@@ -154,7 +153,8 @@ contract RaiseStore is ERC1155, Ownable {
                 require(registeredProduct.isAvaiable, "Item is not available");
             }
 
-            _mint(msg.sender, uint256(keccak256(abi.encodePacked(item.storeId, item.collectionId, item.productId))), item.amount, "");
+            _mint(msg.sender, uint256(keccak256(abi.encodePacked(order.storeId, item.collectionId, item.productId))), item.amount, "");
+
             uint256 sum = item.amount * item.price;
             uint256 fee = sum * serviceFeePromille / 1000;
 

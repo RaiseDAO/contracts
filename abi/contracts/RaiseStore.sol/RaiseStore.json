@@ -341,11 +341,6 @@
             "components": [
               {
                 "internalType": "uint256",
-                "name": "storeId",
-                "type": "uint256"
-              },
-              {
-                "internalType": "uint256",
                 "name": "collectionId",
                 "type": "uint256"
               },
@@ -471,11 +466,6 @@
           },
           {
             "components": [
-              {
-                "internalType": "uint256",
-                "name": "storeId",
-                "type": "uint256"
-              },
               {
                 "internalType": "uint256",
                 "name": "collectionId",
