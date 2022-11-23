@@ -55,7 +55,7 @@ describe("Sale factory", function () {
 
   it("Check that it's impossible to create a valid sale with invalid implementation", async () => {
     await saleFactory.updateSaleContract(SaleType.ERC20, NULL_ADDRESS);
-    await expect(saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, minimumAmountToFund, false, SERVICE_FEE)).to.be.revertedWith("");
+    await expect(saleFactory.createSale(owner.address, SaleType.ERC20, fakeToken1.address, raiseToken.address, minimumAmountToFund, false, SERVICE_FEE)).to.be.revertedWith("ERC1967: new implementation is not a contract");
   });
 
   it("Test sale amount correctness", async () => {

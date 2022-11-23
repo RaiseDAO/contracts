@@ -2,6 +2,7 @@
   "name": "@raisefinance/raisefinance-contracts",
   "description": "Smart contracts of the https://www.raisefinance.io/ project",
   "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "@nomiclabs/hardhat-ethers": "^2.1.0",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@typechain/ethers-v5": "^7.2.0",

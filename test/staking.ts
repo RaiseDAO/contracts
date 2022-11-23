@@ -3,7 +3,7 @@ import { expect } from "chai";
 import { BigNumber } from "ethers";
 import { parseEther } from "ethers/lib/utils";
 import { ethers } from "hardhat";
-import { FakeToken1, FakeToken2, RaiseToken, Staking } from "../typechain";
+import { FakeToken1, RaiseToken, Staking } from "../typechain";
 
 enum Tier {
   None = 0,
@@ -75,7 +75,7 @@ describe("Staking", function () {
     expect(await staking.getPeriodDuration(StakingTime.SixMonths)).to.equal(6 * MONTH_IN_SECONDS);
     expect(await staking.getPeriodDuration(StakingTime.Year)).to.equal(12 * MONTH_IN_SECONDS);
 
-    await expect(staking.getPeriodDuration(StakingTime.Year + 1)).to.be.revertedWith("call revert exception");
+    await expect(staking.getPeriodDuration(StakingTime.Year + 1)).to.be.revertedWithoutReason();
   });
 
 

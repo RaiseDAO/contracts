@@ -1,17 +1,14 @@
 import * as dotenv from "dotenv";
 
 import { HardhatUserConfig, task } from "hardhat/config";
-import "@nomiclabs/hardhat-etherscan";
-import "@nomiclabs/hardhat-waffle";
-import "@typechain/hardhat";
-import "hardhat-gas-reporter";
-import "solidity-coverage";
 import "hardhat-abi-exporter";
 import "./tasks/sale";
 import "./tasks/staking";
 import "./tasks/deploy";
 import "./tasks/lottery";
 import "./tasks/store";
+
+import "@nomicfoundation/hardhat-toolbox";
 
 import "@matterlabs/hardhat-zksync-deploy";
 import "@matterlabs/hardhat-zksync-solc";

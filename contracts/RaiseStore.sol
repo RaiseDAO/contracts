@@ -133,6 +133,8 @@ contract RaiseStore is ERC1155, Ownable {
     }
 
     function buy(UserOrder calldata order) public {
+        require(stores.length > order.storeId, "No such store");
+
         Store memory store = stores[order.storeId];
 
         require(store.owner == order.sellerAddr || store.isDynamicSellerAllowed, "Invalid seller address");

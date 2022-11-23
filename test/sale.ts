@@ -965,7 +965,7 @@ describe("Sale ERC20", function () {
       saleERC20
         .connect(userFan)
         .transferSaleOwnership("0x0000000000000000000000000000000000000000")
-    ).to.be.revertedWith("'New owner is null address");
+    ).to.be.revertedWith("New owner is null address");
   });
 
   // it("Test user can't claim if service has zero balance", async () => {
