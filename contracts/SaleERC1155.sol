@@ -45,6 +45,7 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder, ReentrancyGuard 
     uint256 public totalPayTokenCollected;
     uint256 public totalPayTokenWithdrawn;
     mapping(uint256 => uint256) public projectTokenBalance; // nft id => amount
+    mapping(uint256 => uint256) public projectTokenToDistrubute; // Can't be less then totalProjectTokenSold if project is healthy
     uint256 public oneProjectToken;
     uint256[] public claimTimes;
     uint8[] public claimPercents;
@@ -132,6 +133,7 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder, ReentrancyGuard 
 
     function fund(uint256 nftId, uint256 amount) public {
         projectTokenBalance[nftId] += amount;
+        projectTokenToDistrubute[nftId] += amount;
         projectToken.safeTransferFrom(msg.sender, address(this), nftId, amount, "");
 
         emit Funded(msg.sender, nftId, amount);
@@ -139,10 +141,11 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder, ReentrancyGuard 
 
     function withdraw(uint256 nftId) public onlySaleOwner {
         require(isSaleFinished(), "Not available before sale end");
-        require(projectTokenBalance[nftId] > totalProjectTokenSold[nftId], "Nothing to withdraw");
-        uint256 amount =  projectTokenBalance[nftId] - totalProjectTokenSold[nftId];
+        require(projectTokenToDistrubute[nftId] > totalProjectTokenSold[nftId], "Nothing to withdraw");
+        uint256 amount = projectTokenToDistrubute[nftId] - totalProjectTokenSold[nftId];
 
         projectTokenBalance[nftId] -= amount;
+        projectTokenToDistrubute[nftId] -= amount;
 
         projectToken.safeTransferFrom(address(this), msg.sender, nftId, amount, "");
 
@@ -153,6 +156,8 @@ contract SaleERC1155 is Pausable, Initializable, ERC1155Holder, ReentrancyGuard 
         uint256 amount = projectTokenBalance[nftId];
 
         projectTokenBalance[nftId] = 0;
+        projectTokenToDistrubute[nftId] = 0;
+
         projectToken.safeTransferFrom(address(this), msg.sender, nftId, amount, "");
 
         emit EmergencyWithdrawn(msg.sender, nftId, amount);

@@ -717,6 +717,73 @@ describe("Sale ERC20", function () {
     ).to.be.true;
   });
 
+  it("Test project token withdrawing after claiming", async () => {
+    let whitelist = [[userTycoon.address, 0], [userTycoon2.address, 0]];
+    let leaves = whitelist.map(info => keccak256(solidityPack(["address", "uint8"], [info[0], info[1]])))
+    let merkleTree = new MerkleTree(leaves, keccak256, { sortPairs: true })
+    let rootHash = "0x" + merkleTree.getRoot().toString('hex');
+    const proof = merkleTree.getHexProof(leaves[0]);
+
+    const testAmountToPay = testMaxAllocationPerUser.div(testTokenPrice);
+
+    fakeToken1.transfer(userTycoon.address, testAmountToPay);
+    fakeToken1.connect(userTycoon).approve(saleERC20.address, testAmountToPay);
+
+    await saleERC20
+      .connect(raiseAdmin)
+      .createRound(
+        testTier,
+        testMaxAllocation,
+        testMaxAllocationPerUser,
+        testPeriodSeconds,
+        testTokenPrice,
+        true,
+        rootHash
+      );
+
+    await saleERC20.connect(userTycoon).buy(testAmountToPay, whitelist[0][1], proof);
+
+    const projectTokenBalanceBeforeWithdraw = await saleERC20.projectTokenBalance();
+
+    const tokensNotSold = (projectTokenBalanceBeforeWithdraw).sub(await saleERC20.totalProjectTokenSold());
+
+    expect(tokensNotSold.eq(projectTokenBalanceBeforeWithdraw)).to.be.false;
+
+    const initialOwnerBalance = await raiseToken.balanceOf(owner.address);
+
+    await ethers.provider.send("evm_increaseTime", [testPeriodSeconds]);
+    await ethers.provider.send("evm_mine", []);
+
+    const tycoonBalanceBeforeClaim = await raiseToken.balanceOf(userTycoon.address);
+
+    await saleERC20.connect(userTycoon).claim();
+
+    const tycoonBalanceAfterClaim = await raiseToken.balanceOf(userTycoon.address);
+
+    const claimedByTyccon = tycoonBalanceAfterClaim.sub(tycoonBalanceBeforeClaim);
+
+    await saleERC20.withdraw();
+
+    const ownerBalanceAfterWithdraw = await raiseToken.balanceOf(owner.address);
+
+    expect(
+      (ownerBalanceAfterWithdraw) .sub(tokensNotSold).eq(initialOwnerBalance)
+    ).to.be.true;
+
+    expect(
+      (projectTokenBalanceBeforeWithdraw) .sub(tokensNotSold).eq((await saleERC20.projectTokenBalance()).add(claimedByTyccon))
+    ).to.be.true;
+
+    const initialOwnerPaytokenBalance = await fakeToken1.balanceOf(owner.address);
+    await saleERC20.withdrawRaisedFunds();
+    const finalOwnerPaytokenBalance = await fakeToken1.balanceOf(owner.address);
+
+    expect(finalOwnerPaytokenBalance).to.equal(
+      initialOwnerPaytokenBalance
+        .add(testAmountToPay)
+        .sub(testAmountToPay.mul(serviceFee).div(100))
+    )
+  });
 
   it("Test raised withdrawing", async () => {
     let whitelist = [[userTycoon.address, 0], [userTycoon2.address, 0]];

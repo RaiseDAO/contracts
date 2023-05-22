@@ -45,6 +45,7 @@ contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
     uint256 public totalPayTokenCollected;
     uint256 public totalPayTokenWithdrawn;
     uint256 public projectTokenBalance;
+    uint256 public projectTokenToDistrubute; // Can't be less then totalProjectTokenSold if project is healthy
     uint256 public oneProjectToken;
     uint256[] public claimTimes;
     uint8[] public claimPercents;
@@ -136,6 +137,8 @@ contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
     /// @param amount Amount to fund
     function fund(uint256 amount) public {
         projectTokenBalance += amount;
+        projectTokenToDistrubute += amount;
+        
         projectToken.safeTransferFrom(msg.sender, address(this), amount);
 
         emit Funded(msg.sender, amount);
@@ -144,10 +147,12 @@ contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
     /// @notice Sale owner can withdraw project token left after sale ended
     function withdraw() public onlySaleOwner {
         require(isSaleFinished(), "Not available before sale end");
-        require(projectTokenBalance > totalProjectTokenSold, "Nothing to withdraw");
-        uint256 amount =  projectTokenBalance - totalProjectTokenSold;
+        require(projectTokenToDistrubute > totalProjectTokenSold, "Nothing to withdraw");
+        uint256 amount = projectTokenToDistrubute - totalProjectTokenSold;
 
         projectTokenBalance -= amount;
+        projectTokenToDistrubute -= amount;
+
         projectToken.safeTransfer(msg.sender, amount);
 
         emit Withdrawn(msg.sender, amount);
@@ -158,6 +163,8 @@ contract SaleERC20 is Pausable, Initializable, ReentrancyGuard {
         uint256 amount = projectTokenBalance;
 
         projectTokenBalance = 0;
+        projectTokenToDistrubute = 0;
+
         projectToken.safeTransfer(msg.sender, amount);
 
         emit EmergencyWithdrawn(msg.sender, amount);
